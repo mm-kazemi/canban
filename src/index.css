@@ -1,30 +1,30 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-    font-family: "Vazirmatn", system-ui;
+  font-family: "Vazirmatn", system-ui;
 }
 
 body {
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
 
-    inline-size: min(75rem, 100% - 2rem);
+  inline-size: min(75rem, 100% - 2rem);
 
-    margin-inline: auto;
+  margin-inline: auto;
 
-    font-size: var(--fz-400);
+  font-size: var(--fz-400);
 }
 
-a{
-    color: var(--color-primary);
+a {
+  color: var(--color-primary);
 
-    &:hover{
-    color: var(--color-primary-dark)
-}
+  &:hover {
+    color: var(--color-primary-dark);
+  }
 }
