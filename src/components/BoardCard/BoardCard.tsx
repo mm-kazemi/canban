@@ -1,5 +1,7 @@
 import { type ReactNode } from "react";
 
+import { Link } from "react-router";
+
 import clsx from "clsx";
 
 import styles from "./BoardCard.module.css";
@@ -13,14 +15,14 @@ type Props = {
   color: BoardColor;
 };
 
-function BoardCard({ title, description, color }: Props): ReactNode {
+function BoardCard({ id, title, description, color }: Props): ReactNode {
   return (
     <div className={clsx(styles["board-card"], color)}>
       <div className={styles.cover}></div>
       <div className={styles.content}>
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
-          <a href={"/board"}>View</a>
+          <Link to={`/board/${id}`}>View</Link>
         </div>
         <p className={styles.description}>{description}</p>
       </div>
