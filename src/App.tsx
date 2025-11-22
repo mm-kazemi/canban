@@ -2,10 +2,10 @@ import type { ReactNode } from "react";
 
 import { Route, Routes } from "react-router";
 
-import NotFoundPage from "./NotFoundPage/NotFoundPage.tsx";
 import RootLayout from "./layouts/RootLayout/RootLayout.tsx";
 import BoardPage from "./pages/BoardPage/BoardPage.tsx";
 import HomePage from "./pages/HomePage/HomePage.tsx";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 
 function App(): ReactNode {
   return (
