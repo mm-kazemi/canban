@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import clsx from "clsx";
+import BoardCard from "./components/BoardCard/BoardCard.tsx";
 
 import styles from "./App.module.css";
 
@@ -15,55 +15,48 @@ function App(): ReactNode {
         </div>
         <ul className={styles.boards}>
           <li>
-            <div className={clsx(styles.board, "gray")}>
-              <div className={styles.cover}></div>
-              <div className={styles.content}>
-                <div className={styles.header}>
-                  <div className={styles.title}>Board 1</div>
-                  <a href={"/board"}>View</a>
-                </div>
-                <p className={styles.description}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Alias amet, autem consequatur consequuntur cumque dolorum eos
-                  esse et harum itaque labore libero minima odit pariatur rem
-                  repellat sit vel vitae!
-                </p>
-              </div>
-            </div>
+            <BoardCard
+              id={1}
+              title={"Sprint Task"}
+              description={
+                "A board to keep track of the team’s work during each sprint, " +
+                "including planned user stories, tasks in progress, blocked items, " +
+                "and completed work. Great for monitoring the pace of delivery, " +
+                "ensuring transparency across the team, and identifying any bottlenecks " +
+                "before they affect deadlines."
+              }
+              color={"gray"}
+            />
           </li>
+
           <li>
-            <div className={clsx(styles.board, "blue")}>
-              <div className={styles.cover}></div>
-              <div className={styles.content}>
-                <div className={styles.header}>
-                  <div className={styles.title}>Board 1</div>
-                  <a href={"/board"}>View</a>
-                </div>
-                <p className={styles.description}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Alias amet, autem consequatur consequuntur cumque dolorum eos
-                  esse et harum itaque labore libero minima odit pariatur rem
-                  repellat sit vel vitae!
-                </p>
-              </div>
-            </div>
+            <BoardCard
+              id={2}
+              title={"Product Roadmap"}
+              description={
+                "A board designed to visualize the product's strategic direction over time. " +
+                "It outlines upcoming features, high-priority fixes, and improvement initiatives, " +
+                "linked with milestones and estimated delivery windows. Perfect for aligning " +
+                "all stakeholders—from developers and designers to marketing—with the shared " +
+                "vision and long-term goals of the product."
+              }
+              color={"blue"}
+            />
           </li>
+
           <li>
-            <div className={clsx(styles.board, "red")}>
-              <div className={styles.cover}></div>
-              <div className={styles.content}>
-                <div className={styles.header}>
-                  <div className={styles.title}>Board 1</div>
-                  <a href={"/board"}>View</a>
-                </div>
-                <p className={styles.description}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Alias amet, autem consequatur consequuntur cumque dolorum eos
-                  esse et harum itaque labore libero minima odit pariatur rem
-                  repellat sit vel vitae!
-                </p>
-              </div>
-            </div>
+            <BoardCard
+              id={3}
+              title={"Bug Tracking"}
+              description={
+                "A dedicated board for logging, triaging, and resolving reported bugs or issues. " +
+                "It categorizes problems by severity, impact, and affected components, " +
+                "allowing teams to prioritize fixes efficiently. Combined with testing workflows, " +
+                "this board ensures that critical system errors are resolved quickly and " +
+                "user experience is protected while maintaining release quality."
+              }
+              color={"red"}
+            />
           </li>
         </ul>
       </main>
