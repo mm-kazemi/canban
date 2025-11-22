@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import BoardCard from "../../components/BoardCard/BoardCard.tsx";
 import Button from "../../components/Button/Button.tsx";
+import Footer from "../../components/Footer/Footer.tsx";
 import Header from "../../components/Header/Header.tsx";
 
 import styles from "./HomePage.module.css";
@@ -64,7 +65,7 @@ function HomePage(): ReactNode {
           </li>
         </ul>
       </main>
-      <footer>Footer</footer>
+      <Footer />
     </div>
   );
 }
