@@ -11,7 +11,7 @@ function App(): ReactNode {
     <Routes>
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
-        <Route path={"/board"} element={<BoardPage />} />
+        <Route path={"/board/:id"} element={<BoardPage />} />
       </Route>
     </Routes>
   );

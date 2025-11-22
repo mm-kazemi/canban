@@ -1,7 +1,11 @@
 import { type ReactNode } from "react";
 
+import { useParams } from "react-router";
+
 function BoardPage(): ReactNode {
-  return <div>Board Page</div>;
+  const { id } = useParams();
+
+  return <div>Board Page {id}</div>;
 }
 
 export default BoardPage;

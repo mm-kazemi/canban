@@ -15,14 +15,14 @@ type Props = {
   color: BoardColor;
 };
 
-function BoardCard({ title, description, color }: Props): ReactNode {
+function BoardCard({ id, title, description, color }: Props): ReactNode {
   return (
     <div className={clsx(styles["board-card"], color)}>
       <div className={styles.cover}></div>
       <div className={styles.content}>
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
-          <Link to="/board">View</Link>
+          <Link to={`/board/${id}`}>View</Link>
         </div>
         <p className={styles.description}>{description}</p>
       </div>
