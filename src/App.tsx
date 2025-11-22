@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import clsx from "clsx";
+
 import styles from "./App.module.css";
 
 function App(): ReactNode {
@@ -13,7 +15,7 @@ function App(): ReactNode {
         </div>
         <ul className={styles.boards}>
           <li>
-            <div className={styles.board}>
+            <div className={clsx(styles.board, "gray")}>
               <div className={styles.cover}></div>
               <div className={styles.content}>
                 <div className={styles.header}>
@@ -30,38 +32,36 @@ function App(): ReactNode {
             </div>
           </li>
           <li>
-            <div className={styles.board}>
-              <div className={styles.cover}>
-                <div className={styles.content}>
-                  <div className={styles.header}>
-                    <div className={styles.title}>Board 1</div>
-                    <a href={"/board"}>View</a>
-                  </div>
-                  <p className={styles.description}>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Alias amet, autem consequatur consequuntur cumque dolorum
-                    eos esse et harum itaque labore libero minima odit pariatur
-                    rem repellat sit vel vitae!
-                  </p>
+            <div className={clsx(styles.board, "blue")}>
+              <div className={styles.cover}></div>
+              <div className={styles.content}>
+                <div className={styles.header}>
+                  <div className={styles.title}>Board 1</div>
+                  <a href={"/board"}>View</a>
                 </div>
+                <p className={styles.description}>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Alias amet, autem consequatur consequuntur cumque dolorum eos
+                  esse et harum itaque labore libero minima odit pariatur rem
+                  repellat sit vel vitae!
+                </p>
               </div>
             </div>
           </li>
           <li>
-            <div className={styles.board}>
-              <div className={styles.cover}>
-                <div className={styles.content}>
-                  <div className={styles.header}>
-                    <div className={styles.title}>Board 1</div>
-                    <a href={"/board"}>View</a>
-                  </div>
-                  <p className={styles.description}>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Alias amet, autem consequatur consequuntur cumque dolorum
-                    eos esse et harum itaque labore libero minima odit pariatur
-                    rem repellat sit vel vitae!
-                  </p>
+            <div className={clsx(styles.board, "red")}>
+              <div className={styles.cover}></div>
+              <div className={styles.content}>
+                <div className={styles.header}>
+                  <div className={styles.title}>Board 1</div>
+                  <a href={"/board"}>View</a>
                 </div>
+                <p className={styles.description}>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Alias amet, autem consequatur consequuntur cumque dolorum eos
+                  esse et harum itaque labore libero minima odit pariatur rem
+                  repellat sit vel vitae!
+                </p>
               </div>
             </div>
           </li>
