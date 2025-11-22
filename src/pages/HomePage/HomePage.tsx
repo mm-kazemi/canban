@@ -2,15 +2,12 @@ import type { ReactNode } from "react";
 
 import BoardCard from "../../components/BoardCard/BoardCard.tsx";
 import Button from "../../components/Button/Button.tsx";
-import Footer from "../../components/Footer/Footer.tsx";
-import Header from "../../components/Header/Header.tsx";
 
 import styles from "./HomePage.module.css";
 
 function HomePage(): ReactNode {
   return (
     <div className={styles.app}>
-      <Header />
       <main>
         <div className={styles.header}>
           <h1>Boards</h1>
@@ -55,7 +52,7 @@ function HomePage(): ReactNode {
               title={"Bug Tracking"}
               description={
                 "A dedicated board for logging, triaging, and resolving reported bugs or issues. " +
-                "It categorizes problems by severity, impact, and affected components, " +
+                "It categorizes problems by severity, impact, and affected RootLayout, " +
                 "allowing teams to prioritize fixes efficiently. Combined with testing workflows, " +
                 "this board ensures that critical system errors are resolved quickly and " +
                 "user experience is protected while maintaining release quality."
@@ -65,7 +62,6 @@ function HomePage(): ReactNode {
           </li>
         </ul>
       </main>
-      <Footer />
     </div>
   );
 }
