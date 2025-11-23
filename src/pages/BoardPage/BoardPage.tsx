@@ -1,11 +1,18 @@
 import { type ReactNode } from "react";
 
-import { useParams } from "react-router";
+import BoardList from "../../components/BoardList/BoardList.tsx";
+import KanbanHeader from "../../components/KanbanHeader/KanbanHeader.tsx";
 
 function BoardPage(): ReactNode {
-  const { id } = useParams();
+  return (
+    <div>
+      <KanbanHeader />
+      <div className="list">
+        <BoardList />
 
-  return <div>Board Page {id}</div>;
+      </div>
+    </div>
+  );
 }
 
 export default BoardPage;
