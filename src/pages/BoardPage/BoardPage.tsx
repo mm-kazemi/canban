@@ -1,16 +1,13 @@
 import { type ReactNode } from "react";
 
-import BoardList from "../../components/BoardList/BoardList.tsx";
-import KanbanHeader from "../../components/KanbanHeader/KanbanHeader.tsx";
+import Board from "../../components/Board/Board.tsx";
+
+import styles from "./BoardPage.module.css";
 
 function BoardPage(): ReactNode {
   return (
-    <div>
-      <KanbanHeader />
-      <div className="list">
-        <BoardList />
-
-      </div>
+    <div className={styles["board-page"]}>
+      <Board />
     </div>
   );
 }

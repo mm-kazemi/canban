@@ -1,0 +1,11 @@
+.board-page{
+    block-size: 100%;
+
+    display: grid;
+    gap: 1rem;
+    .list{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        gap: 1rem;
+    }
+}
