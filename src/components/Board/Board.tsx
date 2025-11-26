@@ -9,7 +9,7 @@ import List from "../List/List.tsx";
 import styles from "./Board.module.css";
 
 function Board(): ReactNode {
-  const [todoList] = useState<ListType>({
+  const [todoList ,setTodoList] = useState<ListType>({
     id: "1",
     title: "🔜 To Do",
     items: [
@@ -38,13 +38,29 @@ function Board(): ReactNode {
     ],
   });
 
+  const handleRemoveFirstItem = () => {
+    setTodoList((prevState) => {
+      // اگر لیست خالی بود، کاری نکن (جلوگیری از خطا)
+      if (prevState.items.length === 0) return prevState;
+
+      // ساختن یک آرایه جدید که از ایندکس ۱ شروع می‌شود (یعنی ایندکس ۰ حذف می‌شود)
+      const newItems = prevState.items.slice(1);
+
+      // بازگرداندن آبجکت جدید با آیتم‌های آپدیت شده
+      return {
+        ...prevState, // حفظ id و title قبلی
+        items: newItems, // جایگزینی آرایه آیتم‌ها با آرایه جدید
+      };
+    });
+  };
+
   return (
     <div className={styles.board}>
       <div className={styles.toolbar}>
         <div className={styles.title}>Board Title</div>
         <div className={styles.actions}>
           <IconButton>
-            <MingcuteEdit2Line />
+            <MingcuteEdit2Line onClick={handleRemoveFirstItem} />
           </IconButton>
           <IconButton>
             <MingcuteAddLine />
