@@ -1,11 +1,15 @@
 import { type ReactNode } from "react";
 
-import { useParams } from "react-router";
+import Board from "../../components/Board/Board.tsx";
+
+import styles from "./BoardPage.module.css";
 
 function BoardPage(): ReactNode {
-  const { id } = useParams();
-
-  return <div>Board Page {id}</div>;
+  return (
+    <div className={styles["board-page"]}>
+      <Board />
+    </div>
+  );
 }
 
 export default BoardPage;
