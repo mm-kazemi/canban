@@ -9,7 +9,7 @@ import List from "../List/List.tsx";
 import styles from "./Board.module.css";
 
 function Board(): ReactNode {
-  const [todoList ,setTodoList] = useState<ListType>({
+  const [todoList, setTodoList] = useState<ListType>({
     id: "1",
     title: "🔜 To Do",
     items: [

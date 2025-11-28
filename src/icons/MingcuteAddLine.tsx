@@ -1,4 +1,4 @@
-import {type  JSX, type SVGProps } from "react";
+import { type JSX, type SVGProps } from "react";
 
 export function MingcuteAddLine(props: SVGProps<SVGSVGElement>): JSX.Element {
   return (

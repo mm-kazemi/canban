@@ -1,11 +1,11 @@
 import { type ReactNode } from "react";
 
 import MingcuteMore1Line from "../../icons/MingcuteMore1Line.tsx";
+import type { ListType } from "../../types/list.ts";
 import IconButton from "../IconButton/IconButton.tsx";
 import ListItem from "../ListItem/ListItem.tsx";
 
 import styles from "./List.module.css";
-import type { ListType } from "../../types/list.ts";
 
 type Props = {
   list: ListType;
