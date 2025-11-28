@@ -1,57 +1,38 @@
 import { type ReactNode, useState } from "react";
 
+import { listsData } from "../../data/list-data.ts";
 import MingcuteAddLine from "../../icons/MingcuteAddLine.tsx";
 import MingcuteEdit2Line from "../../icons/MingcuteEdit2Line.tsx";
 import type { ListType } from "../../types/list.ts";
+import Button from "../Button/Button.tsx";
 import IconButton from "../IconButton/IconButton.tsx";
 import List from "../List/List.tsx";
 
 import styles from "./Board.module.css";
 
 function Board(): ReactNode {
-  const [todoList, setTodoList] = useState<ListType>({
-    id: "1",
-    title: "🔜 To Do",
-    items: [
-      { id: "1", title: "Setup Backend Project" },
-      { id: "2", title: "Find a Good Name for the Project" },
-      { id: "3", title: "Implement Landing Page" },
-    ],
-  });
+  const [lists, setLists] = useState<ListType[]>(listsData);
+  const [activeListId, setActiveListId] = useState<string | null>(null);
+  const [activeItemId, setActiveItemId] = useState<string | null>(null);
 
-  const [doingList] = useState<ListType>({
-    id: "2",
-    title: "🔨 Doing",
-    items: [
-      { id: "4", title: "Setup Backend Project" },
-      { id: "5", title: "Find a Good Name for the Project" },
-      { id: "6", title: "Implement Landing Page" },
-    ],
-  });
-  const [doneList] = useState<ListType>({
-    id: "3",
-    title: "🎉 Done",
-    items: [
-      { id: "7", title: "Setup Backend Project" },
-      { id: "8", title: "Find a Good Name for the Project" },
-      { id: "9", title: "Implement Landing Page" },
-    ],
-  });
+  const handleListItemClick = (listId: string, itemId: string): void => {
+    setActiveListId(listId);
+    setActiveItemId(itemId);
+  };
 
-  const handleRemoveFirstItem = () => {
-    setTodoList((prevState) => {
-      // اگر لیست خالی بود، کاری نکن (جلوگیری از خطا)
-      if (prevState.items.length === 0) return prevState;
-
-      // ساختن یک آرایه جدید که از ایندکس ۱ شروع می‌شود (یعنی ایندکس ۰ حذف می‌شود)
-      const newItems = prevState.items.slice(1);
-
-      // بازگرداندن آبجکت جدید با آیتم‌های آپدیت شده
-      return {
-        ...prevState, // حفظ id و title قبلی
-        items: newItems, // جایگزینی آرایه آیتم‌ها با آرایه جدید
-      };
-    });
+  const handleDeleteListItemClick = (): void => {
+    if (!activeListId || !activeItemId) {
+      return;
+    }
+    setLists((prev) =>
+      prev.map((list) =>
+        list.id === activeListId
+          ? { ...list, items: list.items.filter((i) => i.id !== activeItemId) }
+          : list,
+      ),
+    );
+    setActiveItemId(null);
+    setActiveListId(null);
   };
 
   return (
@@ -59,8 +40,18 @@ function Board(): ReactNode {
       <div className={styles.toolbar}>
         <div className={styles.title}>Board Title</div>
         <div className={styles.actions}>
+          {activeListId !== null && (
+            <div className={styles.spacer}>
+              {lists
+                .filter((list) => list.id !== activeListId)
+                .map((list) => (
+                  <Button key={list.id}>{list.title}</Button>
+                ))}
+              <Button onClick={handleDeleteListItemClick}>Remove</Button>
+            </div>
+          )}
           <IconButton>
-            <MingcuteEdit2Line onClick={handleRemoveFirstItem} />
+            <MingcuteEdit2Line />
           </IconButton>
           <IconButton>
             <MingcuteAddLine />
@@ -68,15 +59,11 @@ function Board(): ReactNode {
         </div>
       </div>
       <ul className={styles.lists}>
-        <li>
-          <List list={todoList} />
-        </li>
-        <li>
-          <List list={doingList} />
-        </li>
-        <li>
-          <List list={doneList} />
-        </li>
+        {lists.map((list) => (
+          <li key={list.id}>
+            <List list={list} onClick={handleListItemClick} />
+          </li>
+        ))}
       </ul>
     </div>
   );

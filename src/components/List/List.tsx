@@ -9,9 +9,10 @@ import styles from "./List.module.css";
 
 type Props = {
   list: ListType;
+  onClick?: (listId: string, itemId: string) => void;
 };
 
-function List({ list }: Props): ReactNode {
+function List({ list, onClick }: Props): ReactNode {
   return (
     <div className={styles.list}>
       <div className={styles.header}>
@@ -23,7 +24,7 @@ function List({ list }: Props): ReactNode {
       <ul className={styles.items}>
         {list.items.map((item) => (
           <li key={item.id}>
-            <ListItem item={item} />
+            <ListItem listId={list.id} item={item} onClick={onClick} />
           </li>
         ))}
       </ul>

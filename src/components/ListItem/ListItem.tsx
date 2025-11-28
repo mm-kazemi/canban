@@ -5,11 +5,20 @@ import type { ListItemType } from "../../types/list-item.ts";
 import styles from "./ListItem.module.css";
 
 type Props = {
+  listId: string;
   item: ListItemType;
+  onClick?: (listId: string, itemId: string) => void;
 };
 
-function ListItem({ item }: Props): ReactNode {
-  return <div className={styles["list-item"]}>{item.title}</div>;
+function ListItem({ item, listId, onClick }: Props): ReactNode {
+  return (
+    <div
+      className={styles["list-item"]}
+      onClick={() => onClick?.(listId, item.id)}
+    >
+      {item.title}
+    </div>
+  );
 }
 
 export default ListItem;
