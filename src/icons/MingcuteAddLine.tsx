@@ -1,4 +1,4 @@
-import { type JSX, type SVGProps } from "react";
+import { type JSX, type SVGProps, memo } from "react";
 
 export function MingcuteAddLine(props: SVGProps<SVGSVGElement>): JSX.Element {
   return (
@@ -20,4 +20,4 @@ export function MingcuteAddLine(props: SVGProps<SVGSVGElement>): JSX.Element {
     </svg>
   );
 }
-export default MingcuteAddLine;
+export default memo(MingcuteAddLine);

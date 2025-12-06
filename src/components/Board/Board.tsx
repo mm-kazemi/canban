@@ -1,85 +1,155 @@
-import { type ReactNode, useState } from "react";
+import {
+  type ReactNode,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
+import { listsData } from "../../data/list-data.ts";
 import MingcuteAddLine from "../../icons/MingcuteAddLine.tsx";
 import MingcuteEdit2Line from "../../icons/MingcuteEdit2Line.tsx";
 import type { ListType } from "../../types/list.ts";
+import Button from "../Button/Button.tsx";
 import IconButton from "../IconButton/IconButton.tsx";
 import List from "../List/List.tsx";
 
 import styles from "./Board.module.css";
 
+function save(lists: ListType[]): void {
+  localStorage.setItem("lists", JSON.stringify(lists));
+}
+
+function load(): ListType[] {
+  const item = localStorage.getItem("lists");
+
+  if (!item) {
+    return listsData;
+  }
+
+  return JSON.parse(item);
+}
+
 function Board(): ReactNode {
-  const [todoList, setTodoList] = useState<ListType>({
-    id: "1",
-    title: "🔜 To Do",
-    items: [
-      { id: "1", title: "Setup Backend Project" },
-      { id: "2", title: "Find a Good Name for the Project" },
-      { id: "3", title: "Implement Landing Page" },
-    ],
-  });
+  const [lists, setLists] = useState<ListType[]>(load);
+  const [activeListId, setActiveListId] = useState<string | null>(null);
+  const [activeItemId, setActiveItemId] = useState<string | null>(null);
 
-  const [doingList] = useState<ListType>({
-    id: "2",
-    title: "🔨 Doing",
-    items: [
-      { id: "4", title: "Setup Backend Project" },
-      { id: "5", title: "Find a Good Name for the Project" },
-      { id: "6", title: "Implement Landing Page" },
-    ],
-  });
-  const [doneList] = useState<ListType>({
-    id: "3",
-    title: "🎉 Done",
-    items: [
-      { id: "7", title: "Setup Backend Project" },
-      { id: "8", title: "Find a Good Name for the Project" },
-      { id: "9", title: "Implement Landing Page" },
-    ],
-  });
+  useEffect(() => {
+    save(lists);
+  }, [lists]);
 
-  const handleRemoveFirstItem = () => {
-    setTodoList((prevState) => {
-      // اگر لیست خالی بود، کاری نکن (جلوگیری از خطا)
-      if (prevState.items.length === 0) return prevState;
+  const handleListItemClick = useCallback(
+    (listId: string, itemId: string): void => {
+      setActiveListId(listId);
+      setActiveItemId(itemId);
+    },
+    [],
+  );
 
-      // ساختن یک آرایه جدید که از ایندکس ۱ شروع می‌شود (یعنی ایندکس ۰ حذف می‌شود)
-      const newItems = prevState.items.slice(1);
+  const handleDeleteListItemClick = useCallback((): void => {
+    if (!activeListId || !activeItemId) {
+      return;
+    }
+    setLists((prev) =>
+      prev.map((list) =>
+        list.id === activeListId
+          ? { ...list, items: list.items.filter((i) => i.id !== activeItemId) }
+          : list,
+      ),
+    );
+    setActiveItemId(null);
+    setActiveListId(null);
+  }, [activeListId, activeItemId]);
 
-      // بازگرداندن آبجکت جدید با آیتم‌های آپدیت شده
-      return {
-        ...prevState, // حفظ id و title قبلی
-        items: newItems, // جایگزینی آرایه آیتم‌ها با آرایه جدید
-      };
+  const handleMoveButtonClick = useCallback(
+    (destinationListId: string): void => {
+      if (
+        !activeListId ||
+        !activeItemId ||
+        activeListId === destinationListId
+      ) {
+        return;
+      }
+      const sourceList = lists.find((list) => list.id === activeListId);
+      const sourceItem = sourceList?.items.find((i) => i.id === activeItemId);
+      if (!sourceItem) {
+        return;
+      }
+      setLists((prev) => {
+        return prev.map((list) => {
+          if (list.id === activeListId) {
+            return {
+              ...list,
+              items: list.items.filter((i) => i.id !== activeItemId),
+            };
+          }
+          if (list.id === destinationListId) {
+            return { ...list, items: [...list.items, sourceItem] };
+          }
+          return list;
+        });
+      });
+      setActiveItemId(null);
+      setActiveListId(null);
+    },
+    [lists, activeListId, activeItemId],
+  );
+
+  const editIcon = useMemo(() => <MingcuteEdit2Line />, []);
+
+  const addIcon = useMemo(() => <MingcuteAddLine />, []);
+
+  const handleCreateItem = useCallback((): void => {
+    const newItem = {
+      id: self.crypto.randomUUID(),
+      title: self.crypto.randomUUID(),
+    };
+
+    setLists((prev) => {
+      return prev.map((list) => {
+        if (list.id === "1") {
+          return { ...list, items: [...list.items, newItem] };
+        }
+        return list;
+      });
     });
-  };
+  }, [lists]);
 
   return (
     <div className={styles.board}>
       <div className={styles.toolbar}>
         <div className={styles.title}>Board Title</div>
         <div className={styles.actions}>
-          <IconButton>
-            <MingcuteEdit2Line onClick={handleRemoveFirstItem} />
-          </IconButton>
-          <IconButton>
-            <MingcuteAddLine />
-          </IconButton>
+          {activeListId !== null && (
+            <div className={styles.spacer}>
+              {lists
+                .filter((list) => list.id !== activeListId)
+                .map((list) => (
+                  <Button
+                    key={list.id}
+                    onClick={() => handleMoveButtonClick(list.id)}
+                  >
+                    {list.title}
+                  </Button>
+                ))}
+              <Button onClick={handleDeleteListItemClick}>Remove</Button>
+            </div>
+          )}
+          <IconButton>{editIcon}</IconButton>
+          <IconButton onClick={handleCreateItem}>{addIcon}</IconButton>
         </div>
       </div>
       <ul className={styles.lists}>
-        <li>
-          <List list={todoList} />
-        </li>
-        <li>
-          <List list={doingList} />
-        </li>
-        <li>
-          <List list={doneList} />
-        </li>
+        {lists.map((list) => (
+          <li key={list.id}>
+            <List list={list} onClick={handleListItemClick} />
+          </li>
+        ))}
       </ul>
     </div>
   );
 }
 
-export default Board;
+export default memo(Board);
