@@ -10,8 +10,22 @@ import List from "../List/List.tsx";
 
 import styles from "./Board.module.css";
 
+function save (lists: ListType): void {
+  localStorage.setItem("lists", JSON.stringify(lists));
+}
+
+function load (): ListType[] {
+  const item = localStorage.getItem("lists");
+
+  if (!item) {
+    return listsData;
+  }
+
+  return JSON.parse(item);
+}
+
 function Board(): ReactNode {
-  const [lists, setLists] = useState<ListType[]>(listsData);
+  const [lists, setLists] = useState<ListType[]>(load);
   const [activeListId, setActiveListId] = useState<string | null>(null);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
 
@@ -63,6 +77,7 @@ function Board(): ReactNode {
           if (list.id === destinationListId) {
             return { ...list, items: [...list.items, sourceItem] };
           }
+          save(list);
           return list;
         });
       });
@@ -87,6 +102,7 @@ function Board(): ReactNode {
         if (list.id === "1") {
           return { ...list, items: [...list.items, newItem] };
         }
+        save(list);
         return list;
       });
     });
