@@ -1,4 +1,4 @@
-import { type ReactNode, memo, useCallback, useMemo, useState } from "react";
+import { type ReactNode, memo, useCallback, useMemo, useState, useEffect } from "react";
 
 import { listsData } from "../../data/list-data.ts";
 import MingcuteAddLine from "../../icons/MingcuteAddLine.tsx";
@@ -10,7 +10,7 @@ import List from "../List/List.tsx";
 
 import styles from "./Board.module.css";
 
-function save (lists: ListType): void {
+function save(lists: ListType[]): void {
   localStorage.setItem("lists", JSON.stringify(lists));
 }
 
@@ -28,6 +28,10 @@ function Board(): ReactNode {
   const [lists, setLists] = useState<ListType[]>(load);
   const [activeListId, setActiveListId] = useState<string | null>(null);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
+
+  useEffect(() => {
+    save(lists);
+  }, [lists]);
 
   const handleListItemClick = useCallback(
     (listId: string, itemId: string): void => {
@@ -77,7 +81,6 @@ function Board(): ReactNode {
           if (list.id === destinationListId) {
             return { ...list, items: [...list.items, sourceItem] };
           }
-          save(list);
           return list;
         });
       });
@@ -102,7 +105,6 @@ function Board(): ReactNode {
         if (list.id === "1") {
           return { ...list, items: [...list.items, newItem] };
         }
-        save(list);
         return list;
       });
     });
