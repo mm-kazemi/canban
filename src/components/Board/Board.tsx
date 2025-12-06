@@ -40,6 +40,16 @@ function Board(): ReactNode {
     save(lists);
   }, [lists]);
 
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if(e.code !== "Escape"){
+        return;
+      }
+      setActiveItemId(null)
+      setActiveListId(null)
+    })
+  }, [])
+
   const handleListItemClick = useCallback(
     (listId: string, itemId: string): void => {
       setActiveListId(listId);
