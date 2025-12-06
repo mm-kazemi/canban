@@ -41,14 +41,21 @@ function Board(): ReactNode {
   }, [lists]);
 
   useEffect(() => {
-    document.addEventListener("keydown", (e) => {
-      if(e.code !== "Escape"){
+    const handleDocumentKeyDown = (e: KeyboardEvent): void => {
+      if (e.code !== "Escape") {
         return;
       }
-      setActiveItemId(null)
-      setActiveListId(null)
-    })
-  }, [])
+
+      setActiveListId(null);
+      setActiveItemId(null);
+    };
+
+    document.addEventListener("keydown", handleDocumentKeyDown);
+
+    return (): void => {
+      document.removeEventListener("keydown", handleDocumentKeyDown);
+    };
+  }, []);
 
   const handleListItemClick = useCallback(
     (listId: string, itemId: string): void => {
