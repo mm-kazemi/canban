@@ -1,4 +1,11 @@
-import { type ReactNode, memo, useCallback, useMemo, useState, useEffect } from "react";
+import {
+  type ReactNode,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { listsData } from "../../data/list-data.ts";
 import MingcuteAddLine from "../../icons/MingcuteAddLine.tsx";
@@ -14,7 +21,7 @@ function save(lists: ListType[]): void {
   localStorage.setItem("lists", JSON.stringify(lists));
 }
 
-function load (): ListType[] {
+function load(): ListType[] {
   const item = localStorage.getItem("lists");
 
   if (!item) {

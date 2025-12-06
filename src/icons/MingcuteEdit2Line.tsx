@@ -1,4 +1,4 @@
-import { type JSX, memo, type SVGProps } from "react";
+import { type JSX, type SVGProps, memo } from "react";
 
 export function MingcuteEdit2Line(props: SVGProps<SVGSVGElement>): JSX.Element {
   return (

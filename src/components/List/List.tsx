@@ -1,4 +1,4 @@
-import { memo, type ReactNode } from "react";
+import { type ReactNode, memo } from "react";
 
 import MingcuteMore1Line from "../../icons/MingcuteMore1Line.tsx";
 import type { ListType } from "../../types/list.ts";
@@ -30,6 +30,6 @@ const List = memo(function List({ list, onClick }: Props): ReactNode {
       </ul>
     </div>
   );
-})
+});
 
 export default List;
