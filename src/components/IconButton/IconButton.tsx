@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from "react";
+import { type ComponentProps, memo, type ReactNode } from "react";
 
 import clsx from "clsx";
 
@@ -14,4 +14,4 @@ function IconButton({ className, children, ...otherProps }: Props): ReactNode {
   );
 }
 
-export default IconButton;
+export default memo(IconButton);

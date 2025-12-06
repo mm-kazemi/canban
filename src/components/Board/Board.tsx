@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from "react";
+import { type ReactNode, memo, useCallback, useMemo, useState } from "react";
 
 import { listsData } from "../../data/list-data.ts";
 import MingcuteAddLine from "../../icons/MingcuteAddLine.tsx";
@@ -15,12 +15,15 @@ function Board(): ReactNode {
   const [activeListId, setActiveListId] = useState<string | null>(null);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
 
-  const handleListItemClick = (listId: string, itemId: string): void => {
-    setActiveListId(listId);
-    setActiveItemId(itemId);
-  };
+  const handleListItemClick = useCallback(
+    (listId: string, itemId: string): void => {
+      setActiveListId(listId);
+      setActiveItemId(itemId);
+    },
+    [],
+  );
 
-  const handleDeleteListItemClick = (): void => {
+  const handleDeleteListItemClick = useCallback((): void => {
     if (!activeListId || !activeItemId) {
       return;
     }
@@ -33,71 +36,61 @@ function Board(): ReactNode {
     );
     setActiveItemId(null);
     setActiveListId(null);
-  };
+  }, [activeListId, activeItemId]);
 
-  // const handleMoveButtonClick = (destinationListId: string): void => {
-  //   // ۱. گاردهای محافظ (Validation)
-  //   // اگر مبدا و مقصد یکی هستند یا چیزی انتخاب نشده، هیچ کاری نکن.
-  //   if (
-  //     !activeListId ||
-  //     !activeItemId ||
-  //     activeListId === destinationListId
-  //   ) {
-  //     return;
-  //   }
-  //
-  //   // ۲. پیدا کردن آیتمی که قرار است جابجا شود
-  //   // نکته: باید اول خودِ آبجکت آیتم را پیدا کنیم تا بتوانیم در مقصد اضافه‌اش کنیم.
-  //   // فرض بر این است که متغیر lists (استیت اصلی) در دسترس است.
-  //   const sourceList = lists.find((l) => l.id === activeListId);
-  //   const itemToMove = sourceList?.items.find((i) => i.id === activeItemId);
-  //
-  //   // اگر آیتم پیدا نشد، ادامه نده (جلوگیری از کرش)
-  //   if (!itemToMove) return;
-  //
-  //   // ۳. آپدیت اتمیک استیت
-  //   setLists((prevLists) => {
-  //     return prevLists.map((list) => {
-  //
-  //       // الف) اگر لیست فعلی، لیست مبدا (Source) است: آیتم را حذف کن
-  //       if (list.id === activeListId) {
-  //         return {
-  //           ...list,
-  //           items: list.items.filter((item) => item.id !== activeItemId),
-  //         };
-  //       }
-  //
-  //       // ب) اگر لیست فعلی، لیست مقصد (Destination) است: آیتم را اضافه کن
-  //       if (list.id === destinationListId) {
-  //         return {
-  //           ...list,
-  //           items: [...list.items, itemToMove], // آیتم پیدا شده را به ته لیست اضافه کن
-  //         };
-  //       }
-  //
-  //       // ج) سایر لیست‌ها: بدون تغییر برگردان
-  //       return list;
-  //     });
-  //   });
-  //
-  //   // ۴. ریست کردن حالت انتخاب
-  //   setActiveListId(null);
-  //   setActiveItemId(null);
-  // };
+  const handleMoveButtonClick = useCallback(
+    (destinationListId: string): void => {
+      if (
+        !activeListId ||
+        !activeItemId ||
+        activeListId === destinationListId
+      ) {
+        return;
+      }
+      const sourceList = lists.find((list) => list.id === activeListId);
+      const sourceItem = sourceList?.items.find((i) => i.id === activeItemId);
+      if (!sourceItem) {
+        return;
+      }
+      setLists((prev) => {
+        return prev.map((list) => {
+          if (list.id === activeListId) {
+            return {
+              ...list,
+              items: list.items.filter((i) => i.id !== activeItemId),
+            };
+          }
+          if (list.id === destinationListId) {
+            return { ...list, items: [...list.items, sourceItem] };
+          }
+          return list;
+        });
+      });
+      setActiveItemId(null);
+      setActiveListId(null);
+    },
+    [lists, activeListId, activeItemId],
+  );
 
-  const handleMoveButtonClick = (destinationListId: string): void => {
-    if(!activeListId || !activeItemId || destinationListId === activeListId) {
-      return;
-    }
-    const sourceList = lists.filter((i) => i.id === activeListId);
-    const sourceItem= sourceList.filter((i) => i.id === activeItemId);
+  const editIcon = useMemo(() => <MingcuteEdit2Line />, []);
 
-    if (!sourceItem) {
-      return;
-    }
+  const addIcon = useMemo(() => <MingcuteAddLine />, []);
 
-    setLists(prev => prev.map);
-  }
+  const handleCreateItem = useCallback((): void => {
+    const newItem = {
+      id: self.crypto.randomUUID(),
+      title: self.crypto.randomUUID(),
+    };
+
+    setLists((prev) => {
+      return prev.map((list) => {
+        if (list.id === "1") {
+          return { ...list, items: [...list.items, newItem] };
+        }
+        return list;
+      });
+    });
+  }, [lists]);
 
   return (
     <div className={styles.board}>
@@ -109,17 +102,18 @@ function Board(): ReactNode {
               {lists
                 .filter((list) => list.id !== activeListId)
                 .map((list) => (
-                  <Button key={list.id} onClick={handleMoveButtonClick}>{list.title}</Button>
+                  <Button
+                    key={list.id}
+                    onClick={() => handleMoveButtonClick(list.id)}
+                  >
+                    {list.title}
+                  </Button>
                 ))}
               <Button onClick={handleDeleteListItemClick}>Remove</Button>
             </div>
           )}
-          <IconButton>
-            <MingcuteEdit2Line />
-          </IconButton>
-          <IconButton>
-            <MingcuteAddLine />
-          </IconButton>
+          <IconButton>{editIcon}</IconButton>
+          <IconButton onClick={handleCreateItem}>{addIcon}</IconButton>
         </div>
       </div>
       <ul className={styles.lists}>
@@ -133,4 +127,4 @@ function Board(): ReactNode {
   );
 }
 
-export default Board;
+export default memo(Board);

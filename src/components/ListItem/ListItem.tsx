@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 
 import type { ListItemType } from "../../types/list-item.ts";
 
@@ -10,7 +10,7 @@ type Props = {
   onClick?: (listId: string, itemId: string) => void;
 };
 
-function ListItem({ item, listId, onClick }: Props): ReactNode {
+const ListItem=memo(function ListItem({ item, listId, onClick }: Props): ReactNode {
   return (
     <div
       className={styles["list-item"]}
@@ -19,6 +19,6 @@ function ListItem({ item, listId, onClick }: Props): ReactNode {
       {item.title}
     </div>
   );
-}
+})
 
 export default ListItem;

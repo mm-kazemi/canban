@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 
 import MingcuteMore1Line from "../../icons/MingcuteMore1Line.tsx";
 import type { ListType } from "../../types/list.ts";
@@ -12,7 +12,7 @@ type Props = {
   onClick?: (listId: string, itemId: string) => void;
 };
 
-function List({ list, onClick }: Props): ReactNode {
+const List = memo(function List({ list, onClick }: Props): ReactNode {
   return (
     <div className={styles.list}>
       <div className={styles.header}>
@@ -30,6 +30,6 @@ function List({ list, onClick }: Props): ReactNode {
       </ul>
     </div>
   );
-}
+})
 
 export default List;

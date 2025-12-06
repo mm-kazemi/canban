@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from "react";
+import { type ComponentProps, memo, type ReactNode } from "react";
 
 import clsx from "clsx";
 
@@ -26,4 +26,4 @@ function Button({
   );
 }
 
-export default Button;
+export default memo(Button);
