@@ -114,10 +114,6 @@ function Board(): ReactNode {
     [lists, activeListId, activeItemId],
   );
 
-  const editIcon = useMemo(() => <MingcuteEdit2Line />, []);
-
-  const addIcon = useMemo(() => <MingcuteAddLine />, []);
-
   const handleCreateItem = useCallback((): void => {
     const newItem = {
       id: self.crypto.randomUUID(),
@@ -133,6 +129,10 @@ function Board(): ReactNode {
       });
     });
   }, [lists]);
+
+  const editIcon = useMemo(() => <MingcuteEdit2Line />, []);
+
+  const addIcon = useMemo(() => <MingcuteAddLine />, []);
 
   return (
     <div className={styles.board}>
