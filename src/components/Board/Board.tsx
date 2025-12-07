@@ -65,20 +65,15 @@ function Board(): ReactNode {
     [],
   );
 
-  const handleDeleteListItemClick = useCallback((): void => {
-    if (!activeListId || !activeItemId) {
-      return;
-    }
+  const handleListItemRemove = useCallback((listId: string, itemId: string): void => {
     setLists((prev) =>
       prev.map((list) =>
-        list.id === activeListId
-          ? { ...list, items: list.items.filter((i) => i.id !== activeItemId) }
+        list.id === listId
+          ? { ...list, items: list.items.filter((i) => i.id !== itemId) }
           : list,
       ),
     );
-    setActiveItemId(null);
-    setActiveListId(null);
-  }, [activeListId, activeItemId]);
+  }, []);
 
   const handleMoveButtonClick = useCallback(
     (destinationListId: string): void => {
@@ -151,7 +146,6 @@ function Board(): ReactNode {
                     {list.title}
                   </Button>
                 ))}
-              <Button onClick={handleDeleteListItemClick}>Remove</Button>
             </div>
           )}
           <IconButton>{editIcon}</IconButton>
@@ -161,7 +155,11 @@ function Board(): ReactNode {
       <ul className={styles.lists}>
         {lists.map((list) => (
           <li key={list.id}>
-            <List list={list} onClick={handleListItemClick} />
+            <List
+              list={list}
+              onClick={handleListItemClick}
+              onRemove={handleListItemRemove}
+            />
           </li>
         ))}
       </ul>
