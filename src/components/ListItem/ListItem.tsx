@@ -1,5 +1,6 @@
-import { type MouseEvent, type ReactNode, memo } from "react";
+import { type MouseEvent, type ReactNode, memo, use } from "react";
 
+import BoardContext from "../../Context/board-context.ts";
 import MingcuteDelete2Line from "../../icons/MingcuteDelete2Line.tsx";
 import type { ListItemType } from "../../types/list-item.ts";
 import IconButton from "../IconButton/IconButton.tsx";
@@ -10,19 +11,19 @@ type Props = {
   listId: string;
   item: ListItemType;
   onClick?: (listId: string, itemId: string) => void;
-  onRemove?: (listId: string, itemId: string) => void;
 };
 
 const ListItem = memo(function ListItem({
   item,
   listId,
   onClick,
-  onRemove,
 }: Props): ReactNode {
+  const { remove } = use(BoardContext);
+
   const handleRemoveButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
 
-    onRemove?.(listId, item.id);
+    remove(listId, item.id);
   };
 
   return (

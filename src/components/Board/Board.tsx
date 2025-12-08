@@ -1,8 +1,8 @@
 import {
   type ReactNode,
   memo,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -21,7 +21,7 @@ function Board(): ReactNode {
   const [activeListId, setActiveListId] = useState<string | null>(null);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
 
-  const { lists, create, remove, move } = useContext(BoardContext);
+  const { lists, create, move } = use(BoardContext);
 
   useEffect(() => {
     const handleDocumentKeyDown = (e: KeyboardEvent): void => {
@@ -44,10 +44,6 @@ function Board(): ReactNode {
     },
     [],
   );
-
-  const handleListItemRemove = (listId: string, itemId: string) => {
-    remove(listId, itemId);
-  };
 
   const handleMoveButtonClick = (destinationListId: string): void => {
     if (activeListId && activeItemId) {
@@ -91,11 +87,7 @@ function Board(): ReactNode {
       <ul className={styles.lists}>
         {lists.map((list) => (
           <li key={list.id}>
-            <List
-              list={list}
-              onClick={handleListItemClick}
-              onRemove={handleListItemRemove}
-            />
+            <List list={list} onClick={handleListItemClick} />
           </li>
         ))}
       </ul>
