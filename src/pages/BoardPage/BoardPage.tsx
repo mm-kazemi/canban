@@ -1,17 +1,17 @@
 import { type ReactNode } from "react";
 
 import Board from "../../components/Board/Board.tsx";
-import CounterProvider from "../../providers/CounterProvider.tsx";
+import BoardProvider from "../../providers/BoardProvider.tsx";
 
 import styles from "./BoardPage.module.css";
 
 function BoardPage(): ReactNode {
   return (
-    <CounterProvider>
+    <BoardProvider>
       <div className={styles["board-page"]}>
         <Board />
       </div>
-    </CounterProvider>
+    </BoardProvider>
   );
 }
 
