@@ -2,7 +2,21 @@
   background-color: var(--color-surface-3);
   box-shadow: var(--shadow-2);
 
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+
   padding: 0.5rem;
 
   border-radius: var(--border-radius-2);
+
+  button {
+    opacity: 0;
+  }
+
+  &:hover {
+    button {
+      opacity: 1;
+    }
+  }
 }
