@@ -5,7 +5,7 @@ import {
   useReducer,
 } from "react";
 
-import BoardContext from "../Context/board-context.ts";
+import BoardContext from "../context/board-context.ts";
 import { listsData } from "../data/list-data.ts";
 import ListReducer from "../reducer/list-reducer.ts";
 import type { ListType } from "../types/list.ts";
