@@ -1,5 +1,7 @@
 import { type ReactNode, memo, use, useMemo } from "react";
 
+import { toast } from "react-toastify";
+
 import ActiveItemContext from "../../context/active-item-context.ts";
 import BoardContext from "../../context/board-context.ts";
 import MingcuteAddLine from "../../icons/MingcuteAddLine.tsx";
@@ -17,11 +19,13 @@ function Board(): ReactNode {
   const handleMoveButtonClick = (destinationListId: string): void => {
     if (activeListId && activeItemId) {
       move(activeListId, activeItemId, destinationListId);
+      toast.success("Item successfully moved.");
     }
   };
 
   const handleCreateItem = (): void => {
     create();
+    toast.success("Item created successfully.");
   };
 
   const editIcon = useMemo(() => <MingcuteEdit2Line />, []);
