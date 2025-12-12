@@ -3,6 +3,8 @@
   align-items: center;
   gap: 1ch;
 
+  width: fit-content;
+
   padding: 0.5rem 1rem;
 
   border: none;

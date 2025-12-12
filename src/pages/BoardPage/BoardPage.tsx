@@ -1,17 +1,32 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useRef } from "react";
 
-import Board from "../../components/Board/Board.tsx";
+import Button from "../../components/Button/Button.tsx";
+import Modal from "../../components/Modal/Modal.tsx";
 import ActiveItemProvider from "../../providers/ActiveItemProvider.tsx";
 import BoardProvider from "../../providers/BoardProvider.tsx";
 
 import styles from "./BoardPage.module.css";
 
 function BoardPage(): ReactNode {
+  const useRefState = useRef<HTMLDialogElement>(null);
+
+  const openModalHandleClick = (): void => {
+    useRefState.current?.showModal();
+  };
+
   return (
     <BoardProvider>
       <ActiveItemProvider>
         <div className={styles["board-page"]}>
-          <Board />
+          <Button
+            variant="solid"
+            color="primary"
+            onClick={openModalHandleClick}
+          >
+            open modal
+          </Button>
+          <Modal heading={"this is modal"} ref={useRefState} />
+          {/*<Board />*/}
         </div>
       </ActiveItemProvider>
     </BoardProvider>
