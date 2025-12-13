@@ -25,7 +25,10 @@ function BoardPage(): ReactNode {
           >
             open modal
           </Button>
-          <Modal heading={"this is modal"} ref={useRefState} />
+          <Modal heading={"this is modal"} ref={useRefState}>
+            {" "}
+            this is modal for children
+          </Modal>
           {/*<Board />*/}
         </div>
       </ActiveItemProvider>
