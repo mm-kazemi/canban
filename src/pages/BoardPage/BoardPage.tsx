@@ -2,6 +2,7 @@ import { type ReactNode, useRef } from "react";
 
 import Button from "../../components/Button/Button.tsx";
 import Modal from "../../components/Modal/Modal.tsx";
+import TextInput from "../../components/TextInput/TextInput.tsx";
 import ActiveItemProvider from "../../providers/ActiveItemProvider.tsx";
 import BoardProvider from "../../providers/BoardProvider.tsx";
 
@@ -26,8 +27,7 @@ function BoardPage(): ReactNode {
             open modal
           </Button>
           <Modal heading={"this is modal"} ref={useRefState}>
-            {" "}
-            this is modal for children
+            <TextInput label={"hassan"} />
           </Modal>
           {/*<Board />*/}
         </div>
