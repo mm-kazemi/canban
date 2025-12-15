@@ -14,6 +14,7 @@ import styles from "./Modal.module.css";
 
 type Props = ComponentProps<"dialog"> & {
   ref: RefObject<HTMLDialogElement | null>;
+  contentClassName?: string;
   heading: string;
 };
 
@@ -22,6 +23,7 @@ function Modal({
   className,
   heading,
   children,
+  contentClassName,
   ...otherProps
 }: Props): ReactNode {
   const closeModalHandleClick = (): void => {
@@ -37,24 +39,22 @@ function Modal({
   };
 
   return (
-    <>
-      <dialog
-        onClick={handleDialogClick}
-        ref={ref}
-        className={clsx(styles.modal, className)}
-        {...otherProps}
-      >
-        <header>
-          <div className={styles.heading}>{heading}</div>
-          <div className={styles.actions}>
-            <IconButton onClick={closeModalHandleClick}>
-              <MingcuteCloseLine />
-            </IconButton>
-          </div>
-        </header>
-        <main>{children}</main>
-      </dialog>
-    </>
+    <dialog
+      onClick={handleDialogClick}
+      ref={ref}
+      className={clsx(styles.modal, className)}
+      {...otherProps}
+    >
+      <header>
+        <div className={styles.heading}>{heading}</div>
+        <div className={styles.actions}>
+          <IconButton onClick={closeModalHandleClick}>
+            <MingcuteCloseLine />
+          </IconButton>
+        </div>
+      </header>
+      <main className={contentClassName}>{children}</main>
+    </dialog>
   );
 }
 

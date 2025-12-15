@@ -1,8 +1,7 @@
 import { type ReactNode, useRef } from "react";
 
 import Button from "../../components/Button/Button.tsx";
-import Modal from "../../components/Modal/Modal.tsx";
-import TextInput from "../../components/TextInput/TextInput.tsx";
+import CreateListItemModal from "../../components/CreateListItemModal/CreateListItemModal.tsx";
 import ActiveItemProvider from "../../providers/ActiveItemProvider.tsx";
 import BoardProvider from "../../providers/BoardProvider.tsx";
 
@@ -26,10 +25,7 @@ function BoardPage(): ReactNode {
           >
             open modal
           </Button>
-          <Modal heading={"this is modal"} ref={useRefState}>
-            <TextInput label={"hassan"} />
-          </Modal>
-          {/*<Board />*/}
+          <CreateListItemModal heading={"this is modal"} ref={useRefState} />
         </div>
       </ActiveItemProvider>
     </BoardProvider>
