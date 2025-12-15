@@ -1,12 +1,12 @@
 .create-list-item-modal {
-    form {
-        display: grid;
-        gap: 1rem;
+  form {
+    display: grid;
+    gap: 1rem;
 
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem;
-        }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
     }
+  }
 }

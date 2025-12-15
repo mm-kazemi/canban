@@ -25,7 +25,11 @@ function BoardPage(): ReactNode {
           >
             open modal
           </Button>
-          <CreateListItemModal heading={"this is modal"} ref={useRefState} />
+          <CreateListItemModal
+            heading={"this is modal"}
+            ref={useRefState}
+            listId={"1"}
+          />
         </div>
       </ActiveItemProvider>
     </BoardProvider>
