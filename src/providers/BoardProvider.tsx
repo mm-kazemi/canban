@@ -33,8 +33,8 @@ function BoardProvider({ children }: Props): ReactNode {
     save(lists);
   }, [lists]);
 
-  const create = () => {
-    dispatch({ type: "create" });
+  const create = (listId: string, item: ListType) => {
+    dispatch({ type: "create", listId, item });
   };
 
   const move = (listId: string, itemId: string, destinationListId: string) => {

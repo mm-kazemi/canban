@@ -3,6 +3,8 @@ import type { ListType } from "../types/list.ts";
 type ActionTypes =
   | {
       type: "create";
+      listId: string;
+      item: ListType;
     }
   | {
       type: "move";

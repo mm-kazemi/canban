@@ -4,7 +4,7 @@ import type { ListType } from "../types/list.ts";
 
 type ContextValue = {
   lists: ListType[];
-  create: () => void;
+  create: (listId: string, item: ListType) => void;
   remove: (listId: string, itemId: string) => void;
   move: (listId: string, itemId: string, destinationListId: string) => void;
 };
