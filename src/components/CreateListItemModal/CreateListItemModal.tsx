@@ -5,6 +5,8 @@ import {
   useContext,
 } from "react";
 
+import { toast } from "react-toastify";
+
 import clsx from "clsx";
 
 import BoardContext from "../../context/board-context.ts";
@@ -36,6 +38,13 @@ function CreateListItemModal({
     const id = self.crypto.randomUUID();
 
     create(listId, { id, title });
+    toast.success("Item successfully created.");
+    e.currentTarget.reset();
+    ref.current?.close();
+  };
+
+  const handleCancelButtonClick = () => {
+    ref.current?.close();
   };
 
   return (
@@ -45,14 +54,16 @@ function CreateListItemModal({
         contentClassName,
       )}
       ref={ref}
-      heading={"Create a New Item"}
+      heading={heading}
       {...otherProps}
     >
       <form onSubmit={handleFormSubmit}>
         <TextInput label={"Title"} type={"text"} name={"title"} />
         <div className={styles.actions}>
           <Button color={"primary"}>Submit</Button>
-          <Button type={"button"}>Cancel</Button>
+          <Button type={"reset"} onClick={handleCancelButtonClick}>
+            Cancel
+          </Button>
         </div>
       </form>
     </Modal>

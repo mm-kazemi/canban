@@ -13,7 +13,7 @@ import List from "../List/List.tsx";
 import styles from "./Board.module.css";
 
 function Board(): ReactNode {
-  const { lists, create, move } = use(BoardContext);
+  const { lists, move } = use(BoardContext);
   const { activeListId, activeItemId } = use(ActiveItemContext);
 
   const handleMoveButtonClick = (destinationListId: string): void => {
@@ -21,11 +21,6 @@ function Board(): ReactNode {
       move(activeListId, activeItemId, destinationListId);
       toast.success("Item successfully moved.");
     }
-  };
-
-  const handleCreateItem = (): void => {
-    create();
-    toast.success("Item created successfully.");
   };
 
   const editIcon = useMemo(() => <MingcuteEdit2Line />, []);
@@ -52,7 +47,7 @@ function Board(): ReactNode {
             </div>
           )}
           <IconButton>{editIcon}</IconButton>
-          <IconButton onClick={handleCreateItem}>{addIcon}</IconButton>
+          <IconButton>{addIcon}</IconButton>
         </div>
       </div>
       <ul className={styles.lists}>

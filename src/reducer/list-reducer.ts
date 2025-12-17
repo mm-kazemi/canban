@@ -1,10 +1,11 @@
+import type { ListItemType } from "../types/list-item.ts";
 import type { ListType } from "../types/list.ts";
 
 type ActionTypes =
   | {
       type: "create";
       listId: string;
-      item: ListType;
+      item: ListItemType;
     }
   | {
       type: "move";
@@ -21,13 +22,9 @@ type ActionTypes =
 function ListReducer(state: ListType[], action: ActionTypes): ListType[] {
   switch (action.type) {
     case "create": {
-      const newItem = {
-        id: self.crypto.randomUUID(),
-        title: self.crypto.randomUUID(),
-      };
       return state.map((list) => {
         if (list.id === "1") {
-          return { ...list, items: [...list.items, newItem] };
+          return { ...list, items: [...list.items, action.item] };
         }
         return list;
       });
