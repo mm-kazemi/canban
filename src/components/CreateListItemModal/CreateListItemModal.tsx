@@ -3,6 +3,8 @@ import {
   type FormEvent,
   type ReactNode,
   useContext,
+  useRef,
+  useState,
 } from "react";
 
 import { toast } from "react-toastify";
@@ -29,6 +31,8 @@ function CreateListItemModal({
   ...otherProps
 }: Props): ReactNode {
   const { create } = useContext(BoardContext);
+  const [titleError, setTitleError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -37,14 +41,37 @@ function CreateListItemModal({
     const title = formData.get("title") as string;
     const id = self.crypto.randomUUID();
 
-    create(listId, { id, title });
+    if (!validateTitle(title)) {
+      return;
+    }
+
+    create(listId, { id, title: title.trim() });
     toast.success("Item successfully created.");
-    e.currentTarget.reset();
     ref.current?.close();
   };
 
+  const handleModalClose = (): void => {
+    setTitleError(null);
+    formRef.current?.reset();
+  };
+
   const handleCancelButtonClick = () => {
+    setTitleError(null);
     ref.current?.close();
+  };
+
+  const validateTitle = (title: unknown): boolean => {
+    if (typeof title !== "string") {
+      setTitleError("Title is required");
+      return false;
+    }
+    if (title.trim().length === 0) {
+      setTitleError("Title cannot be empty");
+      return false;
+    }
+
+    setTitleError(null);
+    return true;
   };
 
   return (
@@ -55,10 +82,16 @@ function CreateListItemModal({
       )}
       ref={ref}
       heading={heading}
+      onClose={handleModalClose}
       {...otherProps}
     >
       <form onSubmit={handleFormSubmit}>
-        <TextInput label={"Title"} type={"text"} name={"title"} />
+        <TextInput
+          label={"Title"}
+          type={"text"}
+          name={"title"}
+          error={titleError}
+        />
         <div className={styles.actions}>
           <Button color={"primary"}>Submit</Button>
           <Button type={"reset"} onClick={handleCancelButtonClick}>

@@ -15,4 +15,13 @@
       outline-offset: -2px;
     }
   }
+
+    span{
+        color: var(--color-danger);
+    }
+    &.error {
+        input {
+            border: 1px solid var(--color-danger);
+        }
+    }
 }

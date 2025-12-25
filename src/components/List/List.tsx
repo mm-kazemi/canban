@@ -1,7 +1,9 @@
-import { type ReactNode, memo } from "react";
+import { type ReactNode, memo, useRef } from "react";
 
+import { MingcuteAddLine } from "../../icons/MingcuteAddLine.tsx";
 import MingcuteMore1Line from "../../icons/MingcuteMore1Line.tsx";
 import type { ListType } from "../../types/list.ts";
+import CreateListItemModal from "../CreateListItemModal/CreateListItemModal.tsx";
 import IconButton from "../IconButton/IconButton.tsx";
 import ListItem from "../ListItem/ListItem.tsx";
 
@@ -13,13 +15,24 @@ type Props = {
 };
 
 const List = memo(function List({ list }: Props): ReactNode {
+  const useRefState = useRef<HTMLDialogElement>(null);
+
+  const openModalHandleClick = (): void => {
+    useRefState.current?.showModal();
+  };
+
   return (
     <div className={styles.list}>
       <div className={styles.header}>
         <div className={styles.title}>{list.title}</div>
-        <IconButton>
-          <MingcuteMore1Line />
-        </IconButton>
+        <div className={styles.actions}>
+          <IconButton onClick={openModalHandleClick}>
+            <MingcuteAddLine />
+          </IconButton>
+          <IconButton>
+            <MingcuteMore1Line />
+          </IconButton>
+        </div>
       </div>
       <ul className={styles.items}>
         {list.items.map((item) => (
@@ -28,6 +41,11 @@ const List = memo(function List({ list }: Props): ReactNode {
           </li>
         ))}
       </ul>
+      <CreateListItemModal
+        heading={"Create a New Item"}
+        ref={useRefState}
+        listId={list.id}
+      />
     </div>
   );
 });

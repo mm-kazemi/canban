@@ -6,13 +6,22 @@ import styles from "./TextInput.module.css";
 
 type Props = ComponentProps<"input"> & {
   label: string;
+  error?: string | null;
 };
 
-function TextInput({ className, label, ...otherProps }: Props): ReactNode {
+function TextInput({
+  className,
+  label,
+  error,
+  ...otherProps
+}: Props): ReactNode {
   return (
-    <div className={clsx(styles["text-input"], className)}>
+    <div
+      className={clsx(styles["text-input"], !!error && styles.error, className)}
+    >
       <label htmlFor="xyz">{label}</label>
       <input id="xyz" {...otherProps} />
+      <span className={styles.error}>{error}</span>
     </div>
   );
 }

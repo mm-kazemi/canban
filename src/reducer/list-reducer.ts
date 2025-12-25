@@ -23,7 +23,7 @@ function ListReducer(state: ListType[], action: ActionTypes): ListType[] {
   switch (action.type) {
     case "create": {
       return state.map((list) => {
-        if (list.id === "1") {
+        if (list.id === action.listId) {
           return { ...list, items: [...list.items, action.item] };
         }
         return list;
