@@ -1,9 +1,9 @@
 import {
+  type ChangeEvent,
   type ComponentProps,
   type FormEvent,
   type ReactNode,
   useContext,
-  useRef,
   useState,
 } from "react";
 
@@ -31,14 +31,23 @@ function CreateListItemModal({
   ...otherProps
 }: Props): ReactNode {
   const { create } = useContext(BoardContext);
+  const [title, setTitle] = useState<string>("");
   const [titleError, setTitleError] = useState<string | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setTitle(value);
+
+    if (value.trim().length > 0) {
+      setTitleError(null);
+    } else if (value.length > 0) {
+      setTitleError("Title cannot be only spaces");
+    }
+  };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-    const title = formData.get("title") as string;
     const id = self.crypto.randomUUID();
 
     if (!validateTitle(title)) {
@@ -47,15 +56,11 @@ function CreateListItemModal({
 
     create(listId, { id, title: title.trim() });
     toast.success("Item successfully created.");
-    ref.current?.close();
+    resetAndClose();
   };
 
-  const handleModalClose = (): void => {
-    setTitleError(null);
-    formRef.current?.reset();
-  };
-
-  const handleCancelButtonClick = () => {
+  const resetAndClose = () => {
+    setTitle("");
     setTitleError(null);
     ref.current?.close();
   };
@@ -82,7 +87,7 @@ function CreateListItemModal({
       )}
       ref={ref}
       heading={heading}
-      onClose={handleModalClose}
+      onClose={resetAndClose}
       {...otherProps}
     >
       <form onSubmit={handleFormSubmit}>
@@ -90,12 +95,16 @@ function CreateListItemModal({
           label={"Title"}
           type={"text"}
           name={"title"}
+          value={title}
+          onChange={handleTitleChange}
           error={titleError}
         />
         <div className={styles.actions}>
-          <Button color={"primary"}>Submit</Button>
-          <Button type={"reset"} onClick={handleCancelButtonClick}>
+          <Button type={"reset"} onClick={resetAndClose}>
             Cancel
+          </Button>
+          <Button color={"primary"} disabled={title.trim().length === 0}>
+            Submit
           </Button>
         </div>
       </form>

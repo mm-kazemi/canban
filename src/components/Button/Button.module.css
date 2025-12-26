@@ -112,4 +112,12 @@
       --background-color-hover: var(--color-danger-fade);
     }
   }
+
+    &:disabled {
+        cursor: not-allowed; /* نشانگر موس به شکل ممنوع تغییر می‌کند */
+        opacity: 0.5;        /* دکمه کمرنگ می‌شود */
+        filter: grayscale(1); /* دکمه خاکستری می‌شود */
+        pointer-events: none; /* اطمینان کامل از اینکه هیچ کلیکی ثبت نمی‌شود */
+    }
+
 }
