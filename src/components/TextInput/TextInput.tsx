@@ -1,4 +1,4 @@
-import { type ComponentProps, type ReactNode } from "react";
+import { type ComponentProps, type ReactNode, useId } from "react";
 
 import clsx from "clsx";
 
@@ -15,13 +15,14 @@ function TextInput({
   error,
   ...otherProps
 }: Props): ReactNode {
+  const id = useId();
   return (
     <div
       className={clsx(styles["text-input"], !!error && styles.error, className)}
     >
-      <label htmlFor="xyz">{label}</label>
-      <input id="xyz" {...otherProps} />
-      <span className={styles.error}>{error}</span>
+      <label htmlFor={id}>{label}</label>
+      <input id={id} {...otherProps} />
+      <span className={styles.error}>{error || "\u00A0"}</span>
     </div>
   );
 }
