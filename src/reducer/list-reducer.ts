@@ -19,39 +19,30 @@ export type ListAction =
       itemId: string;
     };
 
-function ListReducer(state: ListType[], action: ListAction): ListType[] {
+function ListReducer(draft: ListType[], action: ListAction): ListType[] {
   switch (action.type) {
     case "create": {
-      return state.map((list) => {
-        if (list.id === action.listId) {
-          return { ...list, items: [...list.items, action.item] };
-        }
-        return list;
-      });
+      const list = draft.find((l) => l.id === action.listId);
+      if (list) {
+        list.items.push(action.item);
+      }
     }
     case "move": {
       const { listId, itemId, destinationListId } = action;
 
-      if (!listId || !itemId || listId === destinationListId) {
-        return state;
-      }
-      const sourceList = state.find((list) => list.id === listId);
-      const sourceItem = sourceList?.items.find((i) => i.id === itemId);
-      if (!sourceItem) {
-        return state;
-      }
-      return state.map((list) => {
-        if (list.id === listId) {
-          return {
-            ...list,
-            items: list.items.filter((i) => i.id !== itemId),
-          };
-        }
-        if (list.id === destinationListId) {
-          return { ...list, items: [...list.items, sourceItem] };
-        }
-        return list;
-      });
+      if (!listId || !itemId || listId === destinationListId) return;
+
+      const sourceList = draft.find((list) => list.id === listId);
+      const destList = draft.find((l) => l.id === destinationListId);
+      if (!sourceList || !destList) return;
+
+      const itemIndex = sourceList.items.findIndex((i) => i.id === itemId);
+      if (itemIndex === -1) return;
+
+      const [movedItem] = sourceList.items.splice(itemIndex, 1);
+      destList.items.push(movedItem);
+
+      break;
     }
     case "remove": {
       const { listId, itemId } = action;
