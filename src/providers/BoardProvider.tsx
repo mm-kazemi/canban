@@ -8,7 +8,6 @@ import {
 import BoardContext from "../context/board-context.ts";
 import { listsData } from "../data/list-data.ts";
 import ListReducer from "../reducer/list-reducer.ts";
-import type { ListItemType } from "../types/list-item.ts";
 import type { ListType } from "../types/list.ts";
 
 type Props = PropsWithChildren;
@@ -28,35 +27,14 @@ function load(): ListType[] {
 }
 
 function BoardProvider({ children }: Props): ReactNode {
-  const [lists, dispatch] = useReducer(ListReducer, load());
+  const [lists, dispatchLists] = useReducer(ListReducer, load());
 
   useEffect(() => {
     save(lists);
   }, [lists]);
 
-  const create = (listId: string, item: ListItemType) => {
-    dispatch({ type: "create", listId, item });
-  };
-
-  const move = (listId: string, itemId: string, destinationListId: string) => {
-    dispatch({
-      type: "move",
-      listId,
-      itemId,
-      destinationListId,
-    });
-  };
-
-  const remove = (listId: string, itemId: string) => {
-    dispatch({
-      type: "remove",
-      listId,
-      itemId,
-    });
-  };
-
   return (
-    <BoardContext value={{ lists, create, remove, move }}>
+    <BoardContext value={{ lists, dispatchLists }}>
       <div>{children}</div>
     </BoardContext>
   );

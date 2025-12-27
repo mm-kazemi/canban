@@ -13,12 +13,17 @@ import List from "../List/List.tsx";
 import styles from "./Board.module.css";
 
 function Board(): ReactNode {
-  const { lists, move } = use(BoardContext);
+  const { lists, dispatchLists } = use(BoardContext);
   const { activeListId, activeItemId } = use(ActiveItemContext);
 
   const handleMoveButtonClick = (destinationListId: string): void => {
     if (activeListId && activeItemId) {
-      move(activeListId, activeItemId, destinationListId);
+      dispatchLists({
+        type: "move",
+        listId: activeListId,
+        itemId: activeItemId,
+        destinationListId,
+      });
       toast.success("Item successfully moved.");
     }
   };

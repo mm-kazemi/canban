@@ -1,7 +1,7 @@
 import type { ListItemType } from "../types/list-item.ts";
 import type { ListType } from "../types/list.ts";
 
-type ActionTypes =
+export type ListAction =
   | {
       type: "create";
       listId: string;
@@ -19,7 +19,7 @@ type ActionTypes =
       itemId: string;
     };
 
-function ListReducer(state: ListType[], action: ActionTypes): ListType[] {
+function ListReducer(state: ListType[], action: ListAction): ListType[] {
   switch (action.type) {
     case "create": {
       return state.map((list) => {

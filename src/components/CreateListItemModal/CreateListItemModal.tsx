@@ -30,7 +30,7 @@ function CreateListItemModal({
   listId,
   ...otherProps
 }: Props): ReactNode {
-  const { create } = useContext(BoardContext);
+  const { dispatchLists } = useContext(BoardContext);
   const [title, setTitle] = useState<string>("");
   const [titleError, setTitleError] = useState<string | null>(null);
 
@@ -54,7 +54,11 @@ function CreateListItemModal({
       return;
     }
 
-    create(listId, { id, title: title.trim() });
+    dispatchLists({
+      type: "create",
+      listId,
+      item: { id, title: title.trim() },
+    });
     toast.success("Item successfully created.");
     resetAndClose();
   };

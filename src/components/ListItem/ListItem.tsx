@@ -18,13 +18,13 @@ type Props = {
 };
 
 const ListItem = memo(function ListItem({ item, listId }: Props): ReactNode {
-  const { remove } = use(BoardContext);
+  const { dispatchLists } = use(BoardContext);
   const { activate, deactivate, activeItemId } = use(ActiveItemContext);
 
   const handleRemoveButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
 
-    remove(listId, item.id);
+    dispatchLists({ type: "remove", listId, itemId: item.id });
     toast.success("Item successfully deleted.");
     deactivate();
   };
