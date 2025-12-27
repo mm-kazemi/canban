@@ -1,7 +1,6 @@
 import { type ReactNode } from "react";
 
 import Board from "../../components/Board/Board.tsx";
-import ActiveItemProvider from "../../providers/ActiveItemProvider.tsx";
 import BoardProvider from "../../providers/BoardProvider.tsx";
 
 import styles from "./BoardPage.module.css";
@@ -9,11 +8,9 @@ import styles from "./BoardPage.module.css";
 function BoardPage(): ReactNode {
   return (
     <BoardProvider>
-      <ActiveItemProvider>
-        <div className={styles["board-page"]}>
-          <Board />
-        </div>
-      </ActiveItemProvider>
+      <div className={styles["board-page"]}>
+        <Board />
+      </div>
     </BoardProvider>
   );
 }

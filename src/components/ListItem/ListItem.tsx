@@ -2,9 +2,6 @@ import { type MouseEvent, type ReactNode, memo, use } from "react";
 
 import { toast } from "react-toastify";
 
-import clsx from "clsx";
-
-import ActiveItemContext from "../../context/active-item-context.ts";
 import BoardContext from "../../context/board-context.ts";
 import MingcuteDelete2Line from "../../icons/MingcuteDelete2Line.tsx";
 import type { ListItemType } from "../../types/list-item.ts";
@@ -19,32 +16,16 @@ type Props = {
 
 const ListItem = memo(function ListItem({ item, listId }: Props): ReactNode {
   const { dispatchLists } = use(BoardContext);
-  const { activate, deactivate, activeItemId } = use(ActiveItemContext);
 
   const handleRemoveButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
 
     dispatchLists({ type: "remove", listId, itemId: item.id });
     toast.success("Item successfully deleted.");
-    deactivate();
-  };
-
-  const handleItemClick = (): void => {
-    if (activeItemId === item.id) {
-      deactivate();
-    } else {
-      activate(listId, item.id);
-    }
   };
 
   return (
-    <div
-      className={clsx(
-        styles["list-item"],
-        item.id === activeItemId && styles.active,
-      )}
-      onClick={handleItemClick}
-    >
+    <div className={styles["list-item"]}>
       {item.title}
       <IconButton onClick={handleRemoveButtonClick}>
         <MingcuteDelete2Line />
