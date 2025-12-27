@@ -15,10 +15,10 @@ type Props = {
 };
 
 const List = memo(function List({ list }: Props): ReactNode {
-  const useRefState = useRef<HTMLDialogElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
-  const openModalHandleClick = (): void => {
-    useRefState.current?.showModal();
+  const handleClickButton = (): void => {
+    modalRef.current?.showModal();
   };
 
   return (
@@ -26,7 +26,7 @@ const List = memo(function List({ list }: Props): ReactNode {
       <div className={styles.header}>
         <div className={styles.title}>{list.title}</div>
         <div className={styles.actions}>
-          <IconButton onClick={openModalHandleClick}>
+          <IconButton onClick={handleClickButton}>
             <MingcuteAddLine />
           </IconButton>
           <IconButton>
@@ -43,7 +43,7 @@ const List = memo(function List({ list }: Props): ReactNode {
       </ul>
       <CreateListItemModal
         heading={"Create a New Item"}
-        ref={useRefState}
+        ref={modalRef}
         listId={list.id}
       />
     </div>
