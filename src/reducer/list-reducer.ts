@@ -1,57 +1,31 @@
+import type { Draft } from "immer";
+
 import type { ListItemType } from "../types/list-item.ts";
 import type { ListType } from "../types/list.ts";
 
 export type ListAction =
   | {
-      type: "create";
-      listId: string;
+      type: "item_created";
+      listIndex: number;
       item: ListItemType;
     }
   | {
-      type: "move";
-      listId: string;
-      itemId: string;
-      destinationListId: string;
-    }
-  | {
-      type: "remove";
-      listId: string;
-      itemId: string;
+      type: "item_removed";
+      itemIndex: number;
+      listIndex: number;
     };
 
-function ListReducer(draft: ListType[], action: ListAction): ListType[] {
+function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
   switch (action.type) {
-    case "create": {
-      const list = draft.find((l) => l.id === action.listId);
-      if (list) {
-        list.items.push(action.item);
-      }
-    }
-    case "move": {
-      const { listId, itemId, destinationListId } = action;
-
-      if (!listId || !itemId || listId === destinationListId) return;
-
-      const sourceList = draft.find((list) => list.id === listId);
-      const destList = draft.find((l) => l.id === destinationListId);
-      if (!sourceList || !destList) return;
-
-      const itemIndex = sourceList.items.findIndex((i) => i.id === itemId);
-      if (itemIndex === -1) return;
-
-      const [movedItem] = sourceList.items.splice(itemIndex, 1);
-      destList.items.push(movedItem);
-
+    case "item_created": {
+      const list = draft[action.listIndex];
+      list.items.push(action.item);
       break;
     }
-    case "remove": {
-      const { listId, itemId } = action;
-
-      return state.map((list) =>
-        list.id === listId
-          ? { ...list, items: list.items.filter((i) => i.id !== itemId) }
-          : list,
-      );
+    case "item_removed": {
+      const list = draft[action.listIndex];
+      list.items.splice(action.itemIndex, 1);
+      break;
     }
     default: {
       throw new Error("No action type");

@@ -10,17 +10,22 @@ import IconButton from "../IconButton/IconButton.tsx";
 import styles from "./ListItem.module.css";
 
 type Props = {
-  listId: string;
+  listIndex: number;
+  itemIndex: number;
   item: ListItemType;
 };
 
-const ListItem = memo(function ListItem({ item, listId }: Props): ReactNode {
+const ListItem = memo(function ListItem({
+  item,
+  listIndex,
+  itemIndex,
+}: Props): ReactNode {
   const { dispatchLists } = use(BoardContext);
 
   const handleRemoveButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
 
-    dispatchLists({ type: "remove", listId, itemId: item.id });
+    dispatchLists({ type: "item_removed", listIndex, itemIndex });
     toast.success("Item successfully deleted.");
   };
 

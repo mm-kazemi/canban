@@ -11,10 +11,11 @@ import styles from "./List.module.css";
 
 type Props = {
   list: ListType;
+  listIndex: number;
   onClick?: (listId: string, itemId: string) => void;
 };
 
-const List = memo(function List({ list }: Props): ReactNode {
+const List = memo(function List({ list, listIndex }: Props): ReactNode {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const handleClickButton = (): void => {
@@ -35,16 +36,16 @@ const List = memo(function List({ list }: Props): ReactNode {
         </div>
       </div>
       <ul className={styles.items}>
-        {list.items.map((item) => (
+        {list.items.map((item, itemIndex) => (
           <li key={item.id}>
-            <ListItem listId={list.id} item={item} />
+            <ListItem listIndex={listIndex} itemIndex={itemIndex} item={item} />
           </li>
         ))}
       </ul>
       <CreateListItemModal
         heading={"Create a New Item"}
         ref={modalRef}
-        listId={list.id}
+        listIndex={listIndex}
       />
     </div>
   );

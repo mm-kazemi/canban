@@ -19,7 +19,7 @@ import TextInput from "../TextInput/TextInput.tsx";
 import styles from "./CreateListItemModal.module.css";
 
 type Props = Omit<ComponentProps<typeof Modal>, "children"> & {
-  listId: string;
+  listIndex: number;
 };
 
 function CreateListItemModal({
@@ -27,7 +27,7 @@ function CreateListItemModal({
   heading,
   className,
   contentClassName,
-  listId,
+  listIndex,
   ...otherProps
 }: Props): ReactNode {
   const { dispatchLists } = useContext(BoardContext);
@@ -55,8 +55,8 @@ function CreateListItemModal({
     }
 
     dispatchLists({
-      type: "create",
-      listId,
+      type: "item_created",
+      listIndex,
       item: { id, title: title.trim() },
     });
     toast.success("Item successfully created.");
