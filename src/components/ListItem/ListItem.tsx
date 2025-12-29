@@ -1,5 +1,8 @@
 import { type MouseEvent, type ReactNode, memo, use } from "react";
 
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 import { toast } from "react-toastify";
 
 import BoardContext from "../../context/board-context.ts";
@@ -22,6 +25,12 @@ const ListItem = memo(function ListItem({
 }: Props): ReactNode {
   const { dispatchLists } = use(BoardContext);
 
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: item.id,
+      data: { isList: true, listIndex, itemIndex, item },
+    });
+
   const handleRemoveButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
 
@@ -30,9 +39,18 @@ const ListItem = memo(function ListItem({
   };
 
   return (
-    <div className={styles["list-item"]}>
+    <div
+      ref={setNodeRef}
+      className={styles["list-item"]}
+      style={{
+        transform: CSS.Translate.toString(transform),
+        transition,
+      }}
+      {...attributes}
+      {...listeners}
+    >
       {item.title}
-      <IconButton onClick={handleRemoveButtonClick}>
+      <IconButton onPointerDown={handleRemoveButtonClick}>
         <MingcuteDelete2Line />
       </IconButton>
     </div>
