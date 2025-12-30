@@ -8,6 +8,7 @@ import {
 import {
   DndContext,
   type DragEndEvent,
+  type DragOverEvent,
   DragOverlay,
   type DragStartEvent,
   PointerSensor,
@@ -31,6 +32,20 @@ function DndProvider({ children }: Props): ReactNode {
     setActiveData(e.active.data.current as DraggableData);
   };
 
+  const handleDragOver = (e: DragOverEvent): void => {
+    if (!e.over) {
+      return;
+    }
+
+    dispatchLists({
+      type: "item_dragged_over",
+      activeListIndex: e.active.data.current!.listIndex,
+      activeItemIndex: e.active.data.current!.itemIndex,
+      overListIndex: e.over.data.current!.listIndex,
+      overItemIndex: e.over.data.current!.itemIndex,
+    });
+  };
+
   const handleDragEnd = (e: DragEndEvent): void => {
     setActiveData(null);
 
@@ -50,10 +65,10 @@ function DndProvider({ children }: Props): ReactNode {
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
       {children}
-      {/*we have bug here*/}
       <DragOverlay>
         {activeData &&
           (activeData.isList ? (
