@@ -53,6 +53,7 @@ function DndProvider({ children }: Props): ReactNode {
       onDragEnd={handleDragEnd}
     >
       {children}
+      {/*we have bug here*/}
       <DragOverlay>
         {activeData &&
           (activeData.isList ? (
