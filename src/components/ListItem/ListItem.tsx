@@ -15,7 +15,7 @@ import IconButton from "../IconButton/IconButton.tsx";
 import styles from "./ListItem.module.css";
 
 type Props = {
-  presentational: boolean;
+  presentational?: boolean;
   listIndex: number;
   itemIndex: number;
   item: ListItemType;

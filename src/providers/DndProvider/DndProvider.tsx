@@ -1,7 +1,13 @@
-import { type PropsWithChildren, type ReactNode, useState } from "react";
+import {
+  type PropsWithChildren,
+  type ReactNode,
+  useContext,
+  useState,
+} from "react";
 
 import {
   DndContext,
+  type DragEndEvent,
   DragOverlay,
   type DragStartEvent,
   PointerSensor,
@@ -10,11 +16,13 @@ import {
 } from "@dnd-kit/core";
 
 import ListItem from "../../components/ListItem/ListItem.tsx";
+import BoardContext from "../../context/board-context.ts";
 import type { DraggableData } from "../../types/draggable-data.ts";
 
 type Props = PropsWithChildren;
 
 function DndProvider({ children }: Props): ReactNode {
+  const { dispatchLists } = useContext(BoardContext);
   const sensors = useSensors(useSensor(PointerSensor));
 
   const [activeData, setActiveData] = useState<DraggableData | null>(null);
@@ -23,8 +31,19 @@ function DndProvider({ children }: Props): ReactNode {
     setActiveData(e.active.data.current as DraggableData);
   };
 
-  const handleDragEnd = (): void => {
+  const handleDragEnd = (e: DragEndEvent): void => {
     setActiveData(null);
+
+    if (!e.over) {
+      return;
+    }
+
+    dispatchLists({
+      type: "item_dragged_end",
+      activeListIndex: e.active.data.current!.listIndex,
+      activeItemIndex: e.active.data.current!.itemIndex,
+      overItemIndex: e.over.data.current!.itemIndex,
+    });
   };
 
   return (
@@ -36,14 +55,14 @@ function DndProvider({ children }: Props): ReactNode {
       {children}
       <DragOverlay>
         {activeData &&
-          (activeData.isList ? null : (
+          (activeData.isList ? (
             <ListItem
-              presentational={true}
+              presentational
               listIndex={activeData.listIndex}
               itemIndex={activeData.itemIndex}
               item={activeData.item}
             />
-          ))}
+          ) : null)}
       </DragOverlay>
     </DndContext>
   );

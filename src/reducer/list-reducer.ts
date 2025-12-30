@@ -1,5 +1,7 @@
 import type { Draft } from "immer";
 
+import { arrayMove } from "@dnd-kit/sortable";
+
 import type { ListItemType } from "../types/list-item.ts";
 import type { ListType } from "../types/list.ts";
 
@@ -13,6 +15,12 @@ export type ListAction =
       type: "item_removed";
       itemIndex: number;
       listIndex: number;
+    }
+  | {
+      type: "item_dragged_end";
+      activeItemIndex: number;
+      activeListIndex: number;
+      overItemIndex: number;
     };
 
 function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
@@ -25,6 +33,23 @@ function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
     case "item_removed": {
       const list = draft[action.listIndex];
       list.items.splice(action.itemIndex, 1);
+      break;
+    }
+    case "item_dragged_end": {
+      const { activeListIndex, activeItemIndex, overItemIndex } = action;
+
+      if (activeItemIndex === overItemIndex) {
+        return;
+      }
+
+      const activeList = draft[activeListIndex];
+
+      activeList.items = arrayMove(
+        activeList.items,
+        activeItemIndex,
+        overItemIndex,
+      );
+
       break;
     }
     default: {

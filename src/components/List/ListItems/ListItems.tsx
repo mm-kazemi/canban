@@ -9,11 +9,12 @@ import ListItem from "../../ListItem/ListItem.tsx";
 import styles from "./ListItems.module.css";
 
 type Props = {
+  presentational?: boolean;
   list: ListType;
   listIndex: number;
 };
 
-function ListItems({ list, listIndex }: Props): ReactNode {
+function ListItems({ list, listIndex, presentational }: Props): ReactNode {
   const { setNodeRef } = useDroppable({
     id: list.id,
     data: { isList: true, listIndex, list },
@@ -24,7 +25,12 @@ function ListItems({ list, listIndex }: Props): ReactNode {
       <ul className={styles["list-items"]} ref={setNodeRef}>
         {list.items.map((item, itemIndex) => (
           <li key={item.id}>
-            <ListItem listIndex={listIndex} itemIndex={itemIndex} item={item} />
+            <ListItem
+              listIndex={listIndex}
+              itemIndex={itemIndex}
+              item={item}
+              presentational={presentational}
+            />
           </li>
         ))}
       </ul>

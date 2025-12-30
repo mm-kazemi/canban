@@ -19,7 +19,7 @@
     opacity: 0;
   }
 
-  &:not(.presentational){
+  &:not(.presentational) {
     &:hover {
       button {
         opacity: 1;
