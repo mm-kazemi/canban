@@ -19,6 +19,7 @@ import {
 import ListItem from "../../components/ListItem/ListItem.tsx";
 import BoardContext from "../../context/board-context.ts";
 import type { DraggableData } from "../../types/draggable-data.ts";
+import { detectCollision } from "./utils/collision-detection.ts‎.ts";
 
 type Props = PropsWithChildren;
 
@@ -60,7 +61,7 @@ function DndProvider({ children }: Props): ReactNode {
       overItemIndex: e.over.data.current!.itemIndex,
     });
   };
-  // this is test for ip address
+
   return (
     <DndContext
       sensors={sensors}
@@ -73,7 +74,8 @@ function DndProvider({ children }: Props): ReactNode {
         {activeData &&
           (activeData.isList ? (
             <ListItem
-              presentational
+              presentational={true}
+              collisionDetection={detectCollision}
               listIndex={activeData.listIndex}
               itemIndex={activeData.itemIndex}
               item={activeData.item}
