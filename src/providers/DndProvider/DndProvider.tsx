@@ -16,6 +16,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 
+import List from "../../components/List/List.tsx";
 import ListItem from "../../components/ListItem/ListItem.tsx";
 import BoardContext from "../../context/board-context.ts";
 import type { DraggableData } from "../../types/draggable-data.ts";
@@ -34,7 +35,7 @@ function DndProvider({ children }: Props): ReactNode {
   };
 
   const handleDragOver = (e: DragOverEvent): void => {
-    if (!e.over) {
+    if (!e.over || e.active.data.current!.isList) {
       return;
     }
 
@@ -54,17 +55,26 @@ function DndProvider({ children }: Props): ReactNode {
       return;
     }
 
-    dispatchLists({
-      type: "item_dragged_end",
-      activeListIndex: e.active.data.current!.listIndex,
-      activeItemIndex: e.active.data.current!.itemIndex,
-      overItemIndex: e.over.data.current!.itemIndex,
-    });
+    if (e.active.data.current!.isList) {
+      dispatchLists({
+        type: "list_dragged_end",
+        activeListIndex: e.active.data.current!.listIndex,
+        overListIndex: e.over.data.current!.listIndex,
+      });
+    } else {
+      dispatchLists({
+        type: "item_dragged_end",
+        activeListIndex: e.active.data.current!.listIndex,
+        activeItemIndex: e.active.data.current!.itemIndex,
+        overItemIndex: e.over.data.current!.itemIndex,
+      });
+    }
   };
 
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={detectCollision}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
@@ -73,14 +83,19 @@ function DndProvider({ children }: Props): ReactNode {
       <DragOverlay>
         {activeData &&
           (activeData.isList ? (
+            <List
+              presentational
+              listIndex={activeData.listIndex}
+              list={activeData.list}
+            />
+          ) : (
             <ListItem
-              presentational={true}
-              collisionDetection={detectCollision}
+              presentational
               listIndex={activeData.listIndex}
               itemIndex={activeData.itemIndex}
               item={activeData.item}
             />
-          ) : null)}
+          ))}
       </DragOverlay>
     </DndContext>
   );

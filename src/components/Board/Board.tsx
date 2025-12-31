@@ -1,5 +1,7 @@
 import { type ReactNode, memo, use, useMemo } from "react";
 
+import { SortableContext } from "@dnd-kit/sortable";
+
 import BoardContext from "../../context/board-context.ts";
 import MingcuteAddLine from "../../icons/MingcuteAddLine.tsx";
 import MingcuteEdit2Line from "../../icons/MingcuteEdit2Line.tsx";
@@ -24,13 +26,15 @@ function Board(): ReactNode {
           <IconButton>{addIcon}</IconButton>
         </div>
       </div>
-      <ul className={styles.lists}>
-        {lists.map((list, listIndex) => (
-          <li key={list.id}>
-            <List list={list} listIndex={listIndex} />
-          </li>
-        ))}
-      </ul>
+      <SortableContext id="board" items={lists.map((list) => list.id)}>
+        <ul className={styles.lists}>
+          {lists.map((list, listIndex) => (
+            <li key={list.id}>
+              <List list={list} listIndex={listIndex} />
+            </li>
+          ))}
+        </ul>
+      </SortableContext>
     </div>
   );
 }

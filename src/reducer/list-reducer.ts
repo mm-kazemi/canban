@@ -28,6 +28,11 @@ export type ListAction =
       activeItemIndex: number;
       activeListIndex: number;
       overItemIndex: number;
+    }
+  | {
+      type: "list_dragged_end";
+      activeListIndex: number;
+      overListIndex: number;
     };
 
 function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
@@ -77,6 +82,20 @@ function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
       );
 
       break;
+    }
+    case "list_dragged_end": {
+      const { activeListIndex, overListIndex } = action;
+
+      if (activeListIndex === overListIndex) {
+        return;
+      }
+
+      const activeList = draft[activeListIndex];
+
+      draft.splice(activeListIndex, 1);
+      draft.splice(overListIndex, 0, activeList);
+
+      return;
     }
     default: {
       throw new Error("No action type");
