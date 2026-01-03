@@ -1,4 +1,4 @@
-import { type ReactNode, memo, use, useMemo } from "react";
+import { type ReactNode, use } from "react";
 
 import { SortableContext } from "@dnd-kit/sortable";
 
@@ -13,17 +13,18 @@ import styles from "./Board.module.css";
 function Board(): ReactNode {
   const { lists } = use(BoardContext);
 
-  const editIcon = useMemo(() => <MingcuteEdit2Line />, []);
-
-  const addIcon = useMemo(() => <MingcuteAddLine />, []);
-
   return (
     <div className={styles.board}>
       <div className={styles.toolbar}>
         <div className={styles.title}>Board Title</div>
         <div className={styles.actions}>
-          <IconButton>{editIcon}</IconButton>
-          <IconButton>{addIcon}</IconButton>
+          <IconButton>
+            <MingcuteEdit2Line />
+          </IconButton>
+
+          <IconButton>
+            <MingcuteAddLine />
+          </IconButton>
         </div>
       </div>
       <SortableContext id="board" items={lists.map((list) => list.id)}>
@@ -39,4 +40,4 @@ function Board(): ReactNode {
   );
 }
 
-export default memo(Board);
+export default Board;

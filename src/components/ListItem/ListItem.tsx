@@ -36,9 +36,10 @@ const ListItem = memo(function ListItem({
     transform,
     transition,
     isDragging,
+    over,
   } = useSortable({
     id: item.id,
-    data: { isList: true, listIndex, itemIndex, item },
+    data: { isList: false, listIndex, itemIndex, item },
   });
 
   const handleRemoveButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
@@ -47,6 +48,8 @@ const ListItem = memo(function ListItem({
     dispatchLists({ type: "item_removed", listIndex, itemIndex });
     toast.success("Item successfully deleted.");
   };
+
+  const overListIndex = over?.data.current?.listIndex;
 
   return (
     <div
@@ -58,7 +61,7 @@ const ListItem = memo(function ListItem({
       style={{
         opacity: isDragging ? "0.5" : undefined,
         transform: CSS.Translate.toString(transform),
-        transition,
+        transition: listIndex === overListIndex ? transition : undefined,
       }}
       {...attributes}
       {...listeners}

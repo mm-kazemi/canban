@@ -81,7 +81,7 @@ function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
         overItemIndex,
       );
 
-      break;
+      return;
     }
     case "list_dragged_end": {
       const { activeListIndex, overListIndex } = action;
