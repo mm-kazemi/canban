@@ -34,31 +34,43 @@ function CreateListItemModal({
   const [title, setTitle] = useState<string>("");
   const [titleError, setTitleError] = useState<string | null>(null);
 
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setTitle(value);
+  const normalizeTitle = (value: string): string =>
+    value.trimStart().replace(/\s{2,}/g, " ");
 
-    if (value.trim().length > 0) {
-      setTitleError(null);
-    } else if (value.length > 0) {
-      setTitleError("Title cannot be only spaces");
-    }
+  const validateTitle = (value: string): string | null => {
+    if (!value.length) return "Title is required";
+    if (!value.trim().length) return "Title cannot be only spaces";
+    if (value.length > 50) return "Max 50 characters allowed";
+    if (!/^[a-zA-Z0-9 ]*$/.test(value)) return "Invalid characters detected";
+
+    return null;
+  };
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = normalizeTitle(e.target.value);
+    setTitle(value);
+    setTitleError(validateTitle(value));
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    const id = self.crypto.randomUUID();
+    const error = validateTitle(title);
 
-    if (!validateTitle(title)) {
+    if (error) {
+      setTitleError(error);
       return;
     }
 
     dispatchLists({
       type: "item_created",
       listIndex,
-      item: { id, title: title.trim() },
+      item: {
+        id: crypto.randomUUID(),
+        title: title.trim(),
+      },
     });
+
     toast.success("Item successfully created.");
     resetAndClose();
   };
@@ -67,20 +79,6 @@ function CreateListItemModal({
     setTitle("");
     setTitleError(null);
     ref.current?.close();
-  };
-
-  const validateTitle = (title: unknown): boolean => {
-    if (typeof title !== "string") {
-      setTitleError("Title is required");
-      return false;
-    }
-    if (title.trim().length === 0) {
-      setTitleError("Title cannot be empty");
-      return false;
-    }
-
-    setTitleError(null);
-    return true;
   };
 
   return (
@@ -107,7 +105,11 @@ function CreateListItemModal({
           <Button type={"reset"} onClick={resetAndClose}>
             Cancel
           </Button>
-          <Button color={"primary"} disabled={title.trim().length === 0}>
+          <Button
+            color={"primary"}
+            type="submit"
+            disabled={!!validateTitle(title)}
+          >
             Submit
           </Button>
         </div>
