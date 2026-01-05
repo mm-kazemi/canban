@@ -11,18 +11,18 @@ import { toast } from "react-toastify";
 
 import clsx from "clsx";
 
+import Button from "../../components/Button/Button.tsx";
+import TextInput from "../../components/TextInput/TextInput.tsx";
 import BoardContext from "../../context/board-context.ts";
-import Button from "../Button/Button.tsx";
 import Modal from "../Modal/Modal.tsx";
-import TextInput from "../TextInput/TextInput.tsx";
 
-import styles from "./CreateListItemModal.module.css";
+import styles from "./ListItemModal.module.css";
 
 type Props = Omit<ComponentProps<typeof Modal>, "children"> & {
   listIndex: number;
 };
 
-function CreateListItemModal({
+function ListItemModal({
   ref,
   heading,
   className,
@@ -83,10 +83,7 @@ function CreateListItemModal({
 
   return (
     <Modal
-      contentClassName={clsx(
-        styles["create-list-item-modal"],
-        contentClassName,
-      )}
+      contentClassName={clsx(styles["list-item-modal"], contentClassName)}
       ref={ref}
       heading={heading}
       onClose={resetAndClose}
@@ -118,4 +115,4 @@ function CreateListItemModal({
   );
 }
 
-export default CreateListItemModal;
+export default ListItemModal;

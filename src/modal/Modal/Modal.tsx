@@ -7,8 +7,8 @@ import {
 
 import clsx from "clsx";
 
+import IconButton from "../../components/IconButton/IconButton.tsx";
 import MingcuteCloseLine from "../../icons/MingcuteCloseLine.tsx";
-import IconButton from "../IconButton/IconButton.tsx";
 
 import styles from "./Modal.module.css";
 
