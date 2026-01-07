@@ -12,7 +12,7 @@ import styles from "./FormModal.module.css";
 
 type ModalProps = {
   modalRef: ComponentProps<typeof Modal>["ref"];
-  heading: ComponentProps<typeof Modal>["ref"];
+  heading: ComponentProps<typeof Modal>["heading"];
 };
 
 type FormProps = Omit<ComponentProps<"form">, "ref"> & {
