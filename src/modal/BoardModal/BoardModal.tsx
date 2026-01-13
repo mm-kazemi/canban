@@ -6,41 +6,42 @@ import {
   useState,
 } from "react";
 
+import { useNavigate } from "react-router";
+
 import { toast } from "react-toastify";
 
 import Button from "../../components/Button/Button.tsx";
+import ColorInput from "../../components/ColorInput/ColorInput.tsx";
 import TextArea from "../../components/TextArea/TextArea.tsx";
 import TextInput from "../../components/TextInput/TextInput.tsx";
-import BoardContext from "../../context/list-context.ts";
-import type { ListItemType } from "../../types/list-item.ts";
+import BoardsContext from "../../context/boards-context.ts";
+import type { BoardColor, BoardType } from "../../types/board.ts";
 import FormModal from "../FormModal/FormModal.tsx";
 
-type Values = Omit<ListItemType, "id">;
+type Values = Omit<BoardType, "id" | "lists">;
 
 type Props = Pick<ComponentProps<typeof FormModal>, "modalRef"> & {
-  listIndex: number;
-  itemIndex?: number;
+  boardId?: string;
   defaultValues?: Partial<Values>;
 };
 
-function ListItemModal({
-  modalRef,
-  listIndex,
-  itemIndex,
-  defaultValues,
-}: Props): ReactNode {
-  const { dispatchLists } = useContext(BoardContext);
+function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
+  const { dispatchBoards } = useContext(BoardsContext);
+
+  const navigate = useNavigate();
 
   const [titleError, setTitleError] = useState<string | null>(null);
 
   const handleRemoveClick = (): void => {
-    if (itemIndex === undefined) {
+    if (boardId === undefined) {
       return;
     }
 
-    dispatchLists({ type: "item_removed", listIndex, itemIndex });
-    toast.success("Item removed successfully.");
+    dispatchBoards({ type: "board_removed", boardId });
+    toast.success("Board removed successfully.");
     modalRef.current?.close();
+
+    navigate("/");
   };
 
   const handleFormReset = (): void => {
@@ -54,29 +55,26 @@ function ListItemModal({
     const values: Values = {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
-      dueDate: formData.get("dueDate") as string,
+      color: formData.get("color") as BoardColor,
     };
 
     if (!validateTitle(values.title)) {
       return;
     }
-
-    if (itemIndex !== undefined) {
-      dispatchLists({
-        type: "item_edited",
-        listIndex,
-        itemIndex,
-        item: values,
+    if (boardId !== undefined) {
+      dispatchBoards({
+        type: "board_edited",
+        boardId,
+        board: values,
       });
-      toast.success("Item created successfully.");
+      toast.success("Board edited successfully.");
     } else {
       const id = globalThis.crypto.randomUUID();
-      dispatchLists({
-        type: "item_created",
-        listIndex,
-        item: { id, ...values },
+      dispatchBoards({
+        type: "board_created",
+        board: { id, lists: [], ...values },
       });
-      toast.success("Item created successfully.");
+      toast.success("Board created successfully.");
     }
 
     modalRef.current?.close();
@@ -96,16 +94,17 @@ function ListItemModal({
     setTitleError(null);
     return true;
   };
+
   return (
     <FormModal
       modalRef={modalRef}
       heading={
-        itemIndex === undefined ? "Create a New Item" : "Edit Exising Item"
+        boardId !== undefined ? "Edit Existing Board" : "Create a New Board"
       }
       onReset={handleFormReset}
       onSubmit={handleFormSubmit}
       extraActions={
-        itemIndex !== undefined && (
+        boardId !== undefined && (
           <Button
             type={"button"}
             variant={"text"}
@@ -129,14 +128,13 @@ function ListItemModal({
         name="description"
         defaultValue={defaultValues?.description}
       />
-      <TextInput
-        label="Due date"
-        type="date"
-        name="dueDate"
-        defaultValue={defaultValues?.dueDate}
+      <ColorInput
+        label="Color"
+        name="color"
+        defaultValue={defaultValues?.color}
       />
     </FormModal>
   );
 }
 
-export default ListItemModal;
+export default BoardModal;
