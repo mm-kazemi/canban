@@ -1,6 +1,6 @@
 import {
   type ComponentProps,
-  type MouseEvent,
+  type PointerEvent,
   type ReactNode,
   type RefObject,
 } from "react";
@@ -24,24 +24,24 @@ function Modal({
   heading,
   children,
   contentClassName,
-  onClick,
+  onPointerDown,
   ...otherProps
 }: Props): ReactNode {
   const closeModalHandleClick = (): void => {
     ref.current?.close();
   };
 
-  const handleDialogClick = (e: MouseEvent<HTMLDialogElement>): void => {
+  const handleDialogClick = (e: PointerEvent<HTMLDialogElement>): void => {
     if (e.target === e.currentTarget) {
       ref.current?.close();
     } else {
-      onClick?.(e);
+      onPointerDown?.(e);
     }
   };
 
   return (
     <dialog
-      onClick={handleDialogClick}
+      onPointerDown={handleDialogClick}
       ref={ref}
       className={clsx(styles.modal, className)}
       {...otherProps}

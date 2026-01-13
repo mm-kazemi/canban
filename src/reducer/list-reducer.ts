@@ -7,9 +7,33 @@ import type { ListType } from "../types/list.ts";
 
 export type ListAction =
   | {
+      type: "list_created";
+      list: ListType;
+    }
+  | {
+      type: "list_edited";
+      listIndex: number;
+      list: Partial<ListType>;
+    }
+  | {
+      type: "list_removed";
+      listIndex: number;
+    }
+  | {
+      type: "list_dragged_end";
+      activeListIndex: number;
+      overListIndex: number;
+    }
+  | {
       type: "item_created";
       listIndex: number;
       item: ListItemType;
+    }
+  | {
+      type: "item_edited";
+      itemIndex: number;
+      listIndex: number;
+      item: Partial<ListItemType>;
     }
   | {
       type: "item_removed";
@@ -28,18 +52,47 @@ export type ListAction =
       activeItemIndex: number;
       activeListIndex: number;
       overItemIndex: number;
-    }
-  | {
-      type: "list_dragged_end";
-      activeListIndex: number;
-      overListIndex: number;
     };
 
 function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
   switch (action.type) {
+    case "list_dragged_end": {
+      const { activeListIndex, overListIndex } = action;
+
+      if (activeListIndex === overListIndex) {
+        return;
+      }
+
+      const activeList = draft[activeListIndex];
+
+      draft.splice(activeListIndex, 1);
+      draft.splice(overListIndex, 0, activeList);
+
+      return;
+    }
+    case "list_created": {
+      draft.push(action.list);
+      break;
+    }
+    case "list_edited": {
+      draft[action.listIndex] = { ...draft[action.listIndex], ...action.list };
+      break;
+    }
+    case "list_removed": {
+      draft.splice(action.listIndex, 1);
+      break;
+    }
     case "item_created": {
       const list = draft[action.listIndex];
       list.items.push(action.item);
+      break;
+    }
+    case "item_edited": {
+      const list = draft[action.listIndex];
+      list.items[action.itemIndex] = {
+        ...list.items[action.itemIndex],
+        ...action.item,
+      };
       break;
     }
     case "item_removed": {
@@ -83,20 +136,7 @@ function ListReducer(draft: Draft<ListType[]>, action: ListAction): void {
 
       return;
     }
-    case "list_dragged_end": {
-      const { activeListIndex, overListIndex } = action;
 
-      if (activeListIndex === overListIndex) {
-        return;
-      }
-
-      const activeList = draft[activeListIndex];
-
-      draft.splice(activeListIndex, 1);
-      draft.splice(overListIndex, 0, activeList);
-
-      return;
-    }
     default: {
       throw new Error("No action type");
     }

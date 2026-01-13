@@ -9,38 +9,30 @@ import {
 import { toast } from "react-toastify";
 
 import Button from "../../components/Button/Button.tsx";
-import ColorInput from "../../components/ColorInput/ColorInput.tsx";
-import TextArea from "../../components/TextArea/TextArea.tsx";
 import TextInput from "../../components/TextInput/TextInput.tsx";
 import BoardContext from "../../context/list-context.ts";
-import type { ListItemType } from "../../types/list-item.ts";
+import type { ListType } from "../../types/list.ts";
 import FormModal from "../FormModal/FormModal.tsx";
 
-type Values = Omit<ListItemType, "id">;
+type Values = Omit<ListType, "id" | "items">;
 
 type Props = Pick<ComponentProps<typeof FormModal>, "modalRef"> & {
-  listIndex: number;
-  itemIndex?: number;
+  listIndex?: number;
   defaultValues?: Partial<Values>;
 };
 
-function ListItemModal({
-  modalRef,
-  listIndex,
-  itemIndex,
-  defaultValues,
-}: Props): ReactNode {
+function ListModal({ modalRef, listIndex, defaultValues }: Props): ReactNode {
   const { dispatchLists } = useContext(BoardContext);
 
   const [titleError, setTitleError] = useState<string | null>(null);
 
   const handleRemoveClick = (): void => {
-    if (itemIndex === undefined) {
+    if (listIndex === undefined) {
       return;
     }
 
-    dispatchLists({ type: "item_removed", listIndex, itemIndex });
-    toast.success("Item removed successfully.");
+    dispatchLists({ type: "list_removed", listIndex });
+    toast.success("List removed successfully.");
     modalRef.current?.close();
   };
 
@@ -54,30 +46,25 @@ function ListItemModal({
     const formData = new FormData(e.currentTarget);
     const values: Values = {
       title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      dueDate: formData.get("dueDate") as string,
     };
 
     if (!validateTitle(values.title)) {
       return;
     }
-
-    if (itemIndex !== undefined) {
+    if (listIndex !== undefined) {
       dispatchLists({
-        type: "item_edited",
+        type: "list_edited",
         listIndex,
-        itemIndex,
-        item: values,
+        list: values,
       });
-      toast.success("Item created successfully.");
+      toast.success("List edited successfully.");
     } else {
       const id = globalThis.crypto.randomUUID();
       dispatchLists({
-        type: "item_created",
-        listIndex,
-        item: { id, ...values },
+        type: "list_created",
+        list: { id, items: [], ...values },
       });
-      toast.success("Item created successfully.");
+      toast.success("List created successfully.");
     }
 
     modalRef.current?.close();
@@ -97,16 +84,17 @@ function ListItemModal({
     setTitleError(null);
     return true;
   };
+
   return (
     <FormModal
       modalRef={modalRef}
       heading={
-        itemIndex === undefined ? "Create a New Item" : "Edit Exising Item"
+        listIndex !== undefined ? "Edit Existing List" : "Create a New List"
       }
       onReset={handleFormReset}
       onSubmit={handleFormSubmit}
       extraActions={
-        itemIndex !== undefined && (
+        listIndex !== undefined && (
           <Button
             type={"button"}
             variant={"text"}
@@ -125,19 +113,8 @@ function ListItemModal({
         defaultValue={defaultValues?.title}
         error={titleError}
       />
-      <TextArea
-        label="Description"
-        name="description"
-        defaultValue={defaultValues?.description}
-      />
-      <TextInput
-        label="Due date"
-        type="date"
-        name="dueDate"
-        defaultValue={defaultValues?.dueDate}
-      />
     </FormModal>
   );
 }
 
-export default ListItemModal;
+export default ListModal;

@@ -8,9 +8,9 @@ type ContextValue = {
   dispatchLists: ActionDispatch<[action: ListAction]>;
 };
 
-const BoardContext = createContext<ContextValue>({
+const ListContext = createContext<ContextValue>({
   lists: [],
   dispatchLists: () => {},
 });
 
-export default BoardContext;
+export default ListContext;

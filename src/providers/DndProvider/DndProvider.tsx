@@ -18,7 +18,7 @@ import {
 
 import List from "../../components/List/List.tsx";
 import ListItem from "../../components/ListItem/ListItem.tsx";
-import BoardContext from "../../context/board-context.ts";
+import BoardContext from "../../context/list-context.ts";
 import type { DraggableData } from "../../types/draggable-data.ts";
 import { detectCollision } from "./utils/collision-detection.ts‎.ts";
 

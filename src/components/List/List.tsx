@@ -36,11 +36,7 @@ function List({ list, listIndex, presentational }: Props): ReactNode {
       }}
       {...attributes}
     >
-      <ListHeader
-        title={list.title}
-        listIndex={listIndex}
-        listeners={listeners}
-      />
+      <ListHeader list={list} listIndex={listIndex} listeners={listeners} />
       <ListItems
         list={list}
         listIndex={listIndex}
