@@ -8,13 +8,18 @@ import {
 
 import { toast } from "react-toastify";
 
+import { z } from "zod";
+
 import Button from "../../components/Button/Button.tsx";
 import TextInput from "../../components/TextInput/TextInput.tsx";
 import BoardContext from "../../context/list-context.ts";
+import { ListSchema } from "../../schemas/list-shema.ts";
 import type { ListType } from "../../types/list.ts";
 import FormModal from "../FormModal/FormModal.tsx";
 
 type Values = Omit<ListType, "id" | "items">;
+
+type Errors = { [key in keyof Values]?: string[] };
 
 type Props = Pick<ComponentProps<typeof FormModal>, "modalRef"> & {
   listIndex?: number;
@@ -24,7 +29,7 @@ type Props = Pick<ComponentProps<typeof FormModal>, "modalRef"> & {
 function ListModal({ modalRef, listIndex, defaultValues }: Props): ReactNode {
   const { dispatchLists } = useContext(BoardContext);
 
-  const [titleError, setTitleError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Errors>({});
 
   const handleRemoveClick = (): void => {
     if (listIndex === undefined) {
@@ -37,7 +42,7 @@ function ListModal({ modalRef, listIndex, defaultValues }: Props): ReactNode {
   };
 
   const handleFormReset = (): void => {
-    setTitleError(null);
+    setErrors({});
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
@@ -48,41 +53,29 @@ function ListModal({ modalRef, listIndex, defaultValues }: Props): ReactNode {
       title: formData.get("title") as string,
     };
 
-    if (!validateTitle(values.title)) {
+    const { error, data } = ListSchema.safeParse(values);
+
+    if (error) {
+      setErrors(z.flattenError(error).fieldErrors);
       return;
     }
     if (listIndex !== undefined) {
       dispatchLists({
         type: "list_edited",
         listIndex,
-        list: values,
+        list: data,
       });
       toast.success("List edited successfully.");
     } else {
       const id = globalThis.crypto.randomUUID();
       dispatchLists({
         type: "list_created",
-        list: { id, items: [], ...values },
+        list: { id, items: [], ...data },
       });
       toast.success("List created successfully.");
     }
 
     modalRef.current?.close();
-  };
-
-  const validateTitle = (title: string): boolean => {
-    if (title.length === 0) {
-      setTitleError("Title cannot be empty.");
-      return false;
-    }
-
-    if (title.length < 5) {
-      setTitleError("Title must be at least 5 characters.");
-      return false;
-    }
-
-    setTitleError(null);
-    return true;
   };
 
   return (
@@ -111,7 +104,7 @@ function ListModal({ modalRef, listIndex, defaultValues }: Props): ReactNode {
         type="text"
         name="title"
         defaultValue={defaultValues?.title}
-        error={titleError}
+        error={errors.title?.[0]}
       />
     </FormModal>
   );
