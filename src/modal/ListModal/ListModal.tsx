@@ -13,7 +13,7 @@ import { z } from "zod";
 import Button from "../../components/Button/Button.tsx";
 import TextInput from "../../components/TextInput/TextInput.tsx";
 import BoardContext from "../../context/list-context.ts";
-import { ListSchema } from "../../schemas/list-shema.ts";
+import { ListSchema } from "../../schemas/list-schema.ts";
 import type { ListType } from "../../types/list.ts";
 import FormModal from "../FormModal/FormModal.tsx";
 
