@@ -3,11 +3,11 @@
   label {
   }
 
-  .colors{
+  .colors {
     display: flex;
     gap: 0.5rem;
 
-    button{
+    button {
       background-color: var(--color-white);
       color: var(--color-white);
 
@@ -30,7 +30,7 @@
         outline: 2px solid var(--color-primary);
         outline-offset: 2px;
       }
-      &.active{
+      &.active {
         background-color: var(--color-main);
       }
     }
