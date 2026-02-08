@@ -1,9 +1,4 @@
-import {
-  type ComponentProps,
-  type ReactNode,
-  type RefObject,
-  useRef,
-} from "react";
+import { type ComponentProps, type ReactNode } from "react";
 
 import Button from "../../components/Button/Button.tsx";
 import Modal from "../Modal/Modal.tsx";
@@ -13,10 +8,10 @@ import styles from "./FormModal.module.css";
 type ModalProps = {
   modalRef: ComponentProps<typeof Modal>["ref"];
   heading: ComponentProps<typeof Modal>["heading"];
+  onClose: ComponentProps<typeof Modal>["onClose"];
 };
 
-type FormProps = Omit<ComponentProps<"form">, "ref"> & {
-  formRef?: RefObject<HTMLFormElement | null>;
+type FormProps = ComponentProps<"form"> & {
   onRemove?: false | (() => void);
 };
 
@@ -24,18 +19,12 @@ type Props = ModalProps & FormProps;
 
 function FormModal({
   modalRef,
-  formRef,
+  onClose,
   heading,
   onRemove,
   children,
   ...otherProps
 }: Props): ReactNode {
-  const internalFormRef = useRef<HTMLFormElement>(null);
-
-  const handleModalClose = (): void => {
-    internalFormRef.current?.reset();
-  };
-
   const handleCancelButtonClick = (): void => {
     modalRef.current?.close();
   };
@@ -45,29 +34,20 @@ function FormModal({
       ref={modalRef}
       contentClassName={styles["form-modal"]}
       heading={heading}
-      onClose={handleModalClose}
+      onClose={onClose}
     >
-      <form
-        ref={(node) => {
-          internalFormRef.current = node;
-
-          if (formRef) {
-            formRef.current = node;
-          }
-        }}
-        {...otherProps}
-      >
+      <form {...otherProps}>
         {children}
         <div className={styles.actions}>
           {onRemove && (
-              <Button
-                  type="button"
-                  variant="text"
-                  color="danger"
-                  onClick={onRemove}
-              >
-                Remove
-              </Button>
+            <Button
+              type="button"
+              variant="text"
+              color="danger"
+              onClick={onRemove}
+            >
+              Remove
+            </Button>
           )}
           <Button
             className={styles.cancel}

@@ -35,6 +35,7 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues,
@@ -76,6 +77,7 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
       heading={
         boardId !== undefined ? "Edit Existing Board" : "Create a New Board"
       }
+      onClose={() => reset()}
       onSubmit={handleSubmit(handleFormSubmit)}
       onRemove={boardId !== undefined && handleRemoveButtonClick}
     >

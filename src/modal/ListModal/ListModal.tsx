@@ -24,6 +24,7 @@ function ListModal({ modalRef, listIndex, defaultValues }: Props): ReactNode {
   const {
     register,
     handleSubmit,
+      reset,
     formState: { errors },
   } = useForm({
     defaultValues,
@@ -66,6 +67,7 @@ function ListModal({ modalRef, listIndex, defaultValues }: Props): ReactNode {
       heading={
         listIndex !== undefined ? "Edit Existing List" : "Create a New List"
       }
+      onClose={() => reset()}
       onSubmit={handleSubmit(handleFormSubmit)}
       onRemove={listIndex !== undefined && handleRemoveButtonClick}
     >
