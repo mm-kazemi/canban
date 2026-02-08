@@ -1,28 +1,22 @@
-import {
-  type ComponentProps,
-  type FormEvent,
-  type ReactNode,
-  useContext,
-  useState,
-} from "react";
+import { type ComponentProps, type ReactNode, useContext } from "react";
 
 import { toast } from "react-toastify";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import TextArea from "../../components/TextArea/TextArea.tsx";
 import TextInput from "../../components/TextInput/TextInput.tsx";
 import BoardContext from "../../context/list-context.ts";
 import { ListItemSchema } from "../../schemas/list-item-schema.ts";
-import type { ListItemType } from "../../types/list-item.ts";
 import FormModal from "../FormModal/FormModal.tsx";
 
-type Values = Omit<ListItemType, "id">;
-type Errors = { [key in keyof Values]?: string[] };
+type Values = z.infer<typeof ListItemSchema>;
 type Props = Pick<ComponentProps<typeof FormModal>, "modalRef"> & {
   listIndex: number;
   itemIndex?: number;
-  defaultValues?: Partial<Values>;
+  defaultValues?: Values;
 };
 
 function ListItemModal({
@@ -33,7 +27,14 @@ function ListItemModal({
 }: Props): ReactNode {
   const { dispatchLists } = useContext(BoardContext);
 
-  const [errors, setErrors] = useState<Errors>({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues,
+    resolver: zodResolver(ListItemSchema),
+  });
 
   const handleRemoveButtonClick = (): void => {
     if (itemIndex === undefined) {
@@ -45,32 +46,13 @@ function ListItemModal({
     modalRef.current?.close();
   };
 
-  const handleFormReset = (): void => {
-    setErrors({});
-  };
-
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const values: Values = {
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      dueDate: formData.get("dueDate") as string,
-    };
-
-    const { data, error } = ListItemSchema.safeParse(values);
-    if (error) {
-      setErrors(z.flattenError(error).fieldErrors);
-      return;
-    }
-
+  const handleFormSubmit = (values: Values): void => {
     if (itemIndex !== undefined) {
       dispatchLists({
         type: "item_edited",
         listIndex,
         itemIndex,
-        item: data,
+        item: values,
       });
       toast.success("Item created successfully.");
     } else {
@@ -78,7 +60,7 @@ function ListItemModal({
       dispatchLists({
         type: "item_created",
         listIndex,
-        item: { id, ...data },
+        item: { id, ...values },
       });
       toast.success("Item created successfully.");
     }
@@ -92,29 +74,21 @@ function ListItemModal({
       heading={
         itemIndex === undefined ? "Create a New Item" : "Edit Exising Item"
       }
-      onReset={handleFormReset}
-      onSubmit={handleFormSubmit}
+      onSubmit={handleSubmit(handleFormSubmit)}
       onRemove={itemIndex !== undefined && handleRemoveButtonClick}
     >
       <TextInput
+        {...register("title")}
         label="Title"
         type="text"
-        name="title"
-        defaultValue={defaultValues?.title}
-        error={errors.title?.[0]}
+        error={errors.title?.message}
       />
-      <TextArea
-        label="Description"
-        name="description"
-        defaultValue={defaultValues?.description}
-        error={errors.description?.[0]}
-      />
+      <TextArea {...register("description")} label="Description" />
       <TextInput
+        {...register("dueDate")}
         label="Due Date"
         type="date"
-        name="dueDate"
-        defaultValue={defaultValues?.dueDate}
-        error={errors.dueDate?.[0]}
+        error={errors.dueDate?.message}
       />
     </FormModal>
   );
