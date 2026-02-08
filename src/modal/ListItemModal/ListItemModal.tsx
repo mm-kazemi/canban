@@ -30,7 +30,7 @@ function ListItemModal({
   const {
     register,
     handleSubmit,
-      reset,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues,
@@ -76,8 +76,8 @@ function ListItemModal({
         itemIndex === undefined ? "Create a New Item" : "Edit Exising Item"
       }
       onClose={() => reset()}
-      onSubmit={handleSubmit(handleFormSubmit)}
       onRemove={itemIndex !== undefined && handleRemoveButtonClick}
+      onSubmit={handleSubmit(handleFormSubmit)}
     >
       <TextInput
         {...register("title")}

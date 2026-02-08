@@ -1,15 +1,11 @@
-import {
-  type ComponentProps,
-  type ReactNode,
-  useContext,
-} from "react";
+import { type ComponentProps, type ReactNode, useContext } from "react";
 
 import { useNavigate } from "react-router";
 
 import { toast } from "react-toastify";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-
 import { z } from "zod";
 
 import ColorInput from "../../components/ColorInput/ColorInput.tsx";
@@ -18,7 +14,6 @@ import TextInput from "../../components/TextInput/TextInput.tsx";
 import BoardsContext from "../../context/boards-context.ts";
 import FormModal from "../FormModal/FormModal.tsx";
 import { BoardSchema } from "./../../schemas/board-schema.ts";
-import {zodResolver} from "@hookform/resolvers/zod";
 
 type Values = z.infer<typeof BoardSchema>;
 type Props = Pick<ComponentProps<typeof FormModal>, "modalRef"> & {
@@ -54,7 +49,6 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
     navigate("/");
   };
 
-
   const handleFormSubmit = (values: Values): void => {
     if (boardId !== undefined) {
       dispatchBoards({ type: "board_edited", boardId, board: values });
@@ -78,8 +72,8 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
         boardId !== undefined ? "Edit Existing Board" : "Create a New Board"
       }
       onClose={() => reset()}
-      onSubmit={handleSubmit(handleFormSubmit)}
       onRemove={boardId !== undefined && handleRemoveButtonClick}
+      onSubmit={handleSubmit(handleFormSubmit)}
     >
       <TextInput {...register("title")} label="Title" type="text" />
       <TextArea label="Description" />
