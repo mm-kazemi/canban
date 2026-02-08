@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 
 import { z } from "zod";
 
-import Button from "../../components/Button/Button.tsx";
 import ColorInput from "../../components/ColorInput/ColorInput.tsx";
 import TextArea from "../../components/TextArea/TextArea.tsx";
 import TextInput from "../../components/TextInput/TextInput.tsx";
@@ -35,7 +34,7 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
 
   const [errors, setErrors] = useState<Errors>({});
 
-  const handleRemoveClick = (): void => {
+  const handleRemoveButtonClick = (): void => {
     if (boardId === undefined) {
       return;
     }
@@ -89,18 +88,7 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
       }
       onReset={handleFormReset}
       onSubmit={handleFormSubmit}
-      extraActions={
-        boardId !== undefined && (
-          <Button
-            type={"button"}
-            variant={"text"}
-            color={"danger"}
-            onClick={handleRemoveClick}
-          >
-            Remove
-          </Button>
-        )
-      }
+      onRemove={boardId !== undefined && handleRemoveButtonClick}
     >
       <TextInput
         label="Title"

@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 
 import { z } from "zod";
 
-import Button from "../../components/Button/Button.tsx";
 import TextArea from "../../components/TextArea/TextArea.tsx";
 import TextInput from "../../components/TextInput/TextInput.tsx";
 import BoardContext from "../../context/list-context.ts";
@@ -36,7 +35,7 @@ function ListItemModal({
 
   const [errors, setErrors] = useState<Errors>({});
 
-  const handleRemoveClick = (): void => {
+  const handleRemoveButtonClick = (): void => {
     if (itemIndex === undefined) {
       return;
     }
@@ -95,18 +94,7 @@ function ListItemModal({
       }
       onReset={handleFormReset}
       onSubmit={handleFormSubmit}
-      extraActions={
-        itemIndex !== undefined && (
-          <Button
-            type={"button"}
-            variant={"text"}
-            color={"danger"}
-            onClick={handleRemoveClick}
-          >
-            Remove
-          </Button>
-        )
-      }
+      onRemove={itemIndex !== undefined && handleRemoveButtonClick}
     >
       <TextInput
         label="Title"
