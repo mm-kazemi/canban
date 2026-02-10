@@ -5,7 +5,6 @@ import { useParams } from "react-router";
 import Board from "../../components/Board/Board.tsx";
 import BoardsContext from "../../context/boards-context.ts";
 import BoardPageProvider from "../../providers/BoardPageProvider.tsx";
-import BoardsProvider from "../../providers/BoardsProvider.tsx";
 import DndProvider from "../../providers/DndProvider/DndProvider.tsx";
 import ListProvider from "../../providers/ListProvider.tsx";
 import NotFoundPage from "../NotFoundPage/NotFoundPage.tsx";
@@ -13,14 +12,6 @@ import NotFoundPage from "../NotFoundPage/NotFoundPage.tsx";
 import styles from "./BoardPage.module.css";
 
 function BoardPage(): ReactNode {
-  return (
-    <BoardsProvider>
-      <BoardPageContent />
-    </BoardsProvider>
-  );
-}
-
-function BoardPageContent(): ReactNode {
   const { id } = useParams();
 
   const { boards } = use(BoardsContext);
@@ -33,7 +24,7 @@ function BoardPageContent(): ReactNode {
 
   return (
     <BoardPageProvider board={board}>
-      <ListProvider>
+      <ListProvider key={id}>
         <DndProvider>
           <div className={styles["board-page"]}>
             <Board />

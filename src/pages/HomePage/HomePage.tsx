@@ -4,19 +4,10 @@ import BoardCard from "../../components/BoardCard/BoardCard.tsx";
 import Button from "../../components/Button/Button.tsx";
 import boardsContext from "../../context/boards-context.ts";
 import BoardModal from "../../modal/BoardModal/BoardModal.tsx";
-import BoardsProvider from "../../providers/BoardsProvider.tsx";
 
 import styles from "./HomePage.module.css";
 
 function HomePage(): ReactNode {
-  return (
-    <BoardsProvider>
-      <HomePageContent />
-    </BoardsProvider>
-  );
-}
-
-function HomePageContent(): ReactNode {
   const { boards } = use(boardsContext);
 
   const modalRef = useRef<HTMLDialogElement>(null);
