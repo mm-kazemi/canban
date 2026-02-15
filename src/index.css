@@ -31,8 +31,6 @@ optgroup {
 body {
   background-color: var(--color-surface-1);
 
-
-
   margin-inline: auto;
 
   font-size: var(--fz-400);
