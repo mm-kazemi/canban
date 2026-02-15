@@ -69,4 +69,10 @@
     background-color: var(--color-100);
     color: var(--color-main);
   }
+
+  &.collapsed {
+    .title {
+      display: none;
+    }
+  }
 }
