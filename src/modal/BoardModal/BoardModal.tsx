@@ -1,4 +1,4 @@
-import { type ComponentProps, type ReactNode, useContext } from "react";
+import { type ComponentProps, type ReactNode, use } from "react";
 
 import { useNavigate } from "react-router";
 
@@ -16,13 +16,18 @@ import FormModal from "../FormModal/FormModal.tsx";
 import { BoardSchema } from "./../../schemas/board-schema.ts";
 
 type Values = z.infer<typeof BoardSchema>;
+
 type Props = Pick<ComponentProps<typeof FormModal>, "modalRef"> & {
   boardId?: string;
   defaultValues?: Values;
 };
 
-function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
-  const { dispatchBoards } = useContext(BoardsContext);
+export default function BoardModal({
+  modalRef,
+  boardId,
+  defaultValues,
+}: Props): ReactNode {
+  const { dispatchBoards } = use(BoardsContext);
 
   const navigate = useNavigate();
 
@@ -44,6 +49,7 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
 
     dispatchBoards({ type: "board_removed", boardId });
     toast.success("Board removed successfully.");
+
     modalRef.current?.close();
 
     navigate("/");
@@ -75,8 +81,17 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
       onRemove={boardId !== undefined && handleRemoveButtonClick}
       onSubmit={handleSubmit(handleFormSubmit)}
     >
-      <TextInput {...register("title")} label="Title" type="text" />
-      <TextArea label="Description" />
+      <TextInput
+        {...register("title")}
+        label="Title"
+        type="text"
+        error={errors.title?.message}
+      />
+      <TextArea
+        {...register("description")}
+        label="Description"
+        error={errors.description?.message}
+      />
       <Controller
         name="color"
         control={control}
@@ -87,5 +102,3 @@ function BoardModal({ modalRef, boardId, defaultValues }: Props): ReactNode {
     </FormModal>
   );
 }
-
-export default BoardModal;
