@@ -11,7 +11,7 @@ stop and ask for clarification rather than inventing an agent feature.
 
 This file exists for a different purpose: it documents how **AI coding
 assistants** (Claude Code and similar tools) should divide labor when
-working *on* this repository, so a new AI session picks the same tools the
+working _on_ this repository, so a new AI session picks the same tools the
 previous session used, instead of re-deriving a strategy from scratch.
 
 ## Assistant roles used on this repo

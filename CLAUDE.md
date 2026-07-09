@@ -41,9 +41,9 @@ aren't obvious just from reading the code.
      component/handler must declare its return type — this codebase writes
      `: ReactNode` and `: void` everywhere; match that style).
    - `@typescript-eslint/explicit-member-accessibility`.
-   Prettier uses `@trivago/prettier-plugin-sort-imports` with a fixed
-   `importOrder` in `.prettierrc.json` — don't hand-order imports, let
-   `prettier:fix` do it.
+     Prettier uses `@trivago/prettier-plugin-sort-imports` with a fixed
+     `importOrder` in `.prettierrc.json` — don't hand-order imports, let
+     `prettier:fix` do it.
 5. **Follow the existing commit-message convention** if asked to commit:
    `git log` shows a bracketed-tag style, e.g. `[ADD] sidebar component`,
    `[FIX] 404`, `[REFACTOR] board modal`, `[HOT FIX]`, `[SYNC]`, `[MOVE]`,
@@ -108,8 +108,8 @@ aren't obvious just from reading the code.
   `--color-main`. Components that render something in a board's color
   (`BoardCard`, `Initials`, `SidebarItem`) apply the **raw `BoardColor`
   string itself as a plain `className`** (e.g. `clsx(styles["board-card"],
-  board.color)` in `BoardCard.tsx`, `clsx(styles.initials, color, ...)` in
-  `Initials.tsx`) — this is a *global* class, not a `styles[...]` lookup.
+board.color)` in `BoardCard.tsx`, `clsx(styles.initials, color, ...)` in
+  `Initials.tsx`) — this is a _global_ class, not a `styles[...]` lookup.
   That global class scopes the `--color-50/100/main` variables for that
   subtree, and the component's own module CSS just reads
   `var(--color-main)` / `var(--color-100)` without knowing which color it

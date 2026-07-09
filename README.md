@@ -14,21 +14,21 @@ lists, and drag cards between them. Everything is stored in the browser
 
 ## Tech stack
 
-| Concern | Choice |
-|---|---|
-| UI framework | React 19 (`react-compiler` babel plugin enabled) |
-| Language | TypeScript (strict mode) |
-| Build tool | Vite 7 |
-| Routing | react-router 7 |
-| State management | React Context + `useImmerReducer` (immer) — no Redux/Zustand |
-| Drag & drop | `@dnd-kit/core` + `@dnd-kit/sortable` with a custom collision detector |
-| Forms | `react-hook-form` + `@hookform/resolvers/zod` |
-| Validation | `zod` |
-| Styling | CSS Modules (`*.module.css`) + `clsx` for conditional classes |
-| Notifications | `react-toastify` |
-| Persistence | Browser `localStorage` only (key: `boards`) — no backend |
-| Lint/Format | ESLint (typescript-eslint) + Prettier (`@trivago/prettier-plugin-sort-imports`) |
-| Deployment | Vercel (SPA rewrite in `vercel.json`) |
+| Concern          | Choice                                                                          |
+| ---------------- | ------------------------------------------------------------------------------- |
+| UI framework     | React 19 (`react-compiler` babel plugin enabled)                                |
+| Language         | TypeScript (strict mode)                                                        |
+| Build tool       | Vite 7                                                                          |
+| Routing          | react-router 7                                                                  |
+| State management | React Context + `useImmerReducer` (immer) — no Redux/Zustand                    |
+| Drag & drop      | `@dnd-kit/core` + `@dnd-kit/sortable` with a custom collision detector          |
+| Forms            | `react-hook-form` + `@hookform/resolvers/zod`                                   |
+| Validation       | `zod`                                                                           |
+| Styling          | CSS Modules (`*.module.css`) + `clsx` for conditional classes                   |
+| Notifications    | `react-toastify`                                                                |
+| Persistence      | Browser `localStorage` only (key: `boards`) — no backend                        |
+| Lint/Format      | ESLint (typescript-eslint) + Prettier (`@trivago/prettier-plugin-sort-imports`) |
+| Deployment       | Vercel (SPA rewrite in `vercel.json`)                                           |
 
 No test framework is installed yet (no Vitest/Jest/Playwright in
 `package.json`).
