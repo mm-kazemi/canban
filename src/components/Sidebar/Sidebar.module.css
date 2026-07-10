@@ -48,3 +48,78 @@
     }
   }
 }
+
+/* The hamburger toggle and backdrop only drive the mobile/tablet drawer.
+   They stay hidden on desktop so that layout is left completely untouched. */
+.hamburger {
+  display: none;
+}
+
+.backdrop {
+  display: none;
+}
+
+/* Mobile + tablet (<= 1024px): the persistent sidebar becomes an off-canvas
+   drawer opened by the hamburger button, with a smooth slide animation. */
+@media (max-width: 1024px) {
+  .hamburger {
+    position: fixed;
+    z-index: 30;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 1rem;
+
+    display: inline-flex;
+
+    background-color: var(--color-surface-3);
+    box-shadow: var(--shadow-2);
+  }
+
+  .backdrop {
+    position: fixed;
+    z-index: 40;
+    inset: 0;
+
+    display: block;
+
+    background-color: var(--color-backdrop);
+    backdrop-filter: blur(2px);
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 50;
+    inset-block: 0;
+    inset-inline-start: 0;
+
+    inline-size: min(17rem, 80vw);
+    max-block-size: 100dvh;
+    overflow-y: auto;
+
+    translate: -100% 0;
+
+    transition: translate 300ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.open {
+      translate: 0 0;
+    }
+
+    /* Collapse is a desktop-only affordance; the drawer is always expanded. */
+    &.collapsed {
+      inline-size: min(17rem, 80vw);
+    }
+
+    .header .arrow {
+      display: none;
+    }
+  }
+}

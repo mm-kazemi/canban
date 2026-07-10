@@ -27,3 +27,17 @@
     inline-size: min(75rem, 100% - 2rem);
   }
 }
+
+/* Mobile + tablet: the sidebar leaves the flow (it becomes a fixed drawer),
+   so the shell collapses to a single column and the content spans full width.
+   Extra top space on main keeps content clear of the fixed hamburger button. */
+@media (max-width: 1024px) {
+  .root-layout {
+    grid-template-areas: "main" "footer";
+    grid-template-columns: minmax(0, 1fr);
+
+    > main {
+      padding-block-start: 3rem;
+    }
+  }
+}
